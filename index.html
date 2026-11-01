@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Varsha — micro-climate risk for every plot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500&family=Noto+Sans+Devanagari:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#EEF2EF;--surface:#FFFFFF;--ink:#14282B;--muted:#4C6165;--line:#CBD7D3;--accent:#2F6B3F;--accent-ink:#FFFFFF;--warn:#B7791F;--bad:#B93A32;--ok:#2F6B3F;--hero:#10302F;--hero-ink:#EAF3EE;
+--head:'Bricolage Grotesque','Noto Sans Devanagari','Trebuchet MS',sans-serif;--body:'IBM Plex Sans','Noto Sans Devanagari','Segoe UI',sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0C1A1B;--surface:#132527;--ink:#E4EFEA;--muted:#9DB5B0;--line:#27403F;--accent:#6FBF84;--accent-ink:#0C1A1B;--warn:#E0A94A;--bad:#EF7B72;--ok:#6FBF84;--hero:#081415;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0C1A1B;--surface:#132527;--ink:#E4EFEA;--muted:#9DB5B0;--line:#27403F;--accent:#6FBF84;--accent-ink:#0C1A1B;--warn:#E0A94A;--bad:#EF7B72;--ok:#6FBF84;--hero:#081415;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--body)}
+h1,h2,h3{font-family:var(--head);line-height:1.1;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header.top{background:var(--hero);color:var(--hero-ink)}
+nav{display:flex;justify-content:space-between;align-items:center;padding:16px 0;gap:12px}
+.logo{font:700 22px var(--head);letter-spacing:.01em;text-decoration:none}
+nav a.cta{background:var(--hero-ink);color:var(--hero);padding:8px 16px;border-radius:999px;text-decoration:none;font-weight:500}
+.hero{padding:56px 0 72px;max-width:760px}
+.hero h1{font-size:clamp(2.4rem,6vw,4.4rem);font-weight:700;letter-spacing:-.02em}
+.hero p{font-size:1.15rem;color:#B9CFC8;margin:20px 0 28px;max-width:60ch}
+.btn{display:inline-block;background:var(--warn);color:#1b1305;border:0;padding:13px 22px;border-radius:8px;font:500 1rem var(--body);text-decoration:none;cursor:pointer}
+.rain{display:flex;gap:6px;margin-top:40px;height:46px;align-items:flex-end}
+.rain i{flex:1;background:#6FBF84;opacity:.75;border-radius:2px 2px 0 0;max-width:22px}
+section{padding:64px 0}
+h2{font-size:clamp(1.7rem,3.5vw,2.4rem);margin-bottom:12px}
+.lead{color:var(--muted);max-width:62ch;margin:0 0 32px}
+.demo{display:grid;grid-template-columns:340px 1fr;gap:24px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:22px}
+label{display:block;font-weight:500;margin:16px 0 6px;font-size:.95rem}
+label span{float:right;color:var(--muted);font-variant-numeric:tabular-nums}
+select,input[type=range]{width:100%}
+select{padding:10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+input[type=range]{accent-color:var(--accent)}
+.gauges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g{border-left:6px solid var(--c);padding:6px 0 6px 12px}
+.g b{font:700 2.2rem var(--head);display:block;font-variant-numeric:tabular-nums}
+.g small{color:var(--muted)}
+.tag{display:inline-block;font-weight:500;color:var(--c)}
+.chart-wrap{overflow-x:auto;margin-top:22px}
+svg{display:block;width:100%;min-width:480px;height:auto}
+.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;margin-top:8px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+ol.plan{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px}
+ol.plan li{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.plan .when{font-weight:500;color:var(--accent)}
+ol.plan strong{display:block}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s;border-top:2px solid var(--ink)}
+.pipe div{padding:20px 18px 0 0;counter-increment:s}
+.pipe div::before{content:counter(s);font:700 1.4rem var(--head);color:var(--accent);display:block;margin-bottom:6px}
+.pipe h3{font-size:1.15rem;margin-bottom:6px}
+.pipe p{margin:0;color:var(--muted);font-size:.95rem}
+table{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top;font-size:.95rem}
+th{font-family:var(--head);font-size:1rem}
+.scroll{overflow-x:auto}
+.note{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:18px 22px;color:var(--muted)}
+footer{background:var(--hero);color:#B9CFC8;padding:36px 0;font-size:.95rem}
+@media (max-width:860px){.demo{grid-template-columns:1fr}.pipe{grid-template-columns:1fr 1fr}.gauges{grid-template-columns:1fr}}
+@media (max-width:520px){.pipe{grid-template-columns:1fr}ol.plan li{grid-template-columns:1fr;gap:2px}}
+@media (prefers-reduced-motion:no-preference){.rain i{animation:fall 1.2s ease-out both}}
+@keyframes fall{from{transform:scaleY(0);transform-origin:bottom}to{transform:scaleY(1)}}
+nav{flex-wrap:wrap}.date{color:#B9CFC8;font-size:.9rem}.navr{display:flex;gap:10px;align-items:center}.langsel{width:auto;padding:7px 10px;background:transparent;color:var(--hero-ink);border:1px solid #4C6A66}.langsel option{color:#14282B}
+details.more{margin-top:18px;border-top:1px solid var(--line);padding-top:12px}details.more summary{cursor:pointer;font-weight:500;color:var(--accent)}
+.srcn{display:block;color:var(--accent);font-size:.8rem;margin-top:2px}.btn:disabled{opacity:.6;cursor:wait}
+
+.ax h3{font-size:1.25rem;margin:36px 0 12px}.ax-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.ax-card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}.ax-card b{font:700 1.7rem var(--head);display:block}.ax-card small{color:var(--muted);display:block}.ax-card a{color:var(--accent);font-size:.82rem}
+.bdg{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.82rem;font-weight:500;color:#fff;background:var(--c)}
+.ax-concl{border-left:6px solid var(--accent);background:var(--surface);padding:16px 20px;border-radius:0 12px 12px 0;margin-top:14px}.ax-concl p{margin:6px 0}
+.ax-crit{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}.ax-crit div{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:10px;padding:12px}
+.mit-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.mit-cards .ax-card ul{margin:8px 0 0;padding-left:18px;color:var(--muted);font-size:.93rem}.mit-cards .ax-card h4{margin:0;font:700 1.05rem var(--head)}
+.ax-act li{margin:6px 0}@media print{header.top,nav,.no-print{display:none}}
+
+/* v3 polish */
+body{background:radial-gradient(1200px 500px at 85% -5%,rgba(111,191,132,.18),transparent 60%),radial-gradient(900px 500px at -5% 30%,rgba(183,121,31,.10),transparent 60%),var(--bg)}
+header.top{background:linear-gradient(135deg,#071d1d 0%,#12453a 55%,#2f6b3f 100%);position:relative;overflow:hidden}
+header.top::before,header.top::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);opacity:.45;pointer-events:none}
+header.top::before{width:420px;height:420px;background:#E0A94A;right:-120px;top:-140px}header.top::after{width:380px;height:380px;background:#6FBF84;left:-140px;bottom:-200px}
+header.top .wrap{position:relative;z-index:1}.hero h1{background:linear-gradient(90deg,#fff,#cfeede 60%,#f3d38a);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 26px}.chips span{padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);font-size:.88rem;color:#EAF3EE}
+.btn{background:linear-gradient(135deg,#E0A94A,#c98a2b);box-shadow:0 6px 18px rgba(183,121,31,.35);transition:transform .2s,box-shadow .2s}.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(183,121,31,.45)}
+h2{position:relative;padding-bottom:12px}h2::after{content:"";position:absolute;left:0;bottom:0;width:64px;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--warn))}
+.panel,.ax-card,.pipe div{border-radius:18px;box-shadow:0 8px 28px rgba(16,48,47,.08);transition:transform .25s,box-shadow .25s}
+.panel:hover,.ax-card:hover{transform:translateY(-3px);box-shadow:0 14px 36px rgba(16,48,47,.16)}
+.ax-card{border-top:4px solid var(--accent)}.ax-card b{background:linear-gradient(90deg,var(--accent),var(--warn));-webkit-background-clip:text;background-clip:text;color:transparent}
+th{background:linear-gradient(90deg,var(--hero),#1f5a3d);color:#fff}tbody tr:nth-child(even) td{background:rgba(111,191,132,.08)}tbody tr:hover td{background:rgba(224,169,74,.15)}
+table{border-radius:14px;box-shadow:0 8px 24px rgba(16,48,47,.08)}
+.g{background:var(--surface);border-radius:12px;padding:12px 14px;box-shadow:0 4px 14px rgba(16,48,47,.07)}
+.sl{display:inline-flex;align-items:center;gap:6px;margin:0 0 14px;padding:8px 16px;border-radius:999px;border:1px solid var(--accent);background:var(--surface);color:var(--accent);font:500 .9rem var(--body);cursor:pointer;transition:all .2s}
+.sl:hover,.sl.on{background:var(--accent);color:var(--accent-ink)}header.top .sl{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.4)}
+.sec-in{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}.sec-in.vis{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.sec-in{opacity:1;transform:none;transition:none}}
+footer{background:linear-gradient(135deg,#071d1d,#12453a)}
+</style>
+</head>
+<body>
+<header class="top">
+ <div class="wrap">
+  <nav><a class="logo" href="#top">Varsha</a><span class="date" id="today"></span><div class="navr"><select id="lang" class="langsel"><option value="en">English</option><option value="hi">हिन्दी</option><option value="ml">മലയാളം</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option></select><a class="cta" href="#engine">Try the engine</a></div></nav>
+  <div class="hero" id="top">
+   <h1>Know what the next 8 weeks will do to your plot.</h1>
+   <p>Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.</p>
+   <a class="btn" href="#engine">Run a plot forecast</a>
+   <div class="rain" aria-hidden="true"></div>
+  </div>
+ </div>
+</header>
+
+<section id="engine">
+ <div class="wrap">
+  <h2>Forecast a plot</h2>
+  <p class="lead">Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.</p>
+  <div class="demo">
+   <div class="panel">
+    <label for="region">Region preset</label>
+    <select id="region">
+     <option value="palakkad">Palakkad, Kerala</option>
+     <option value="marathwada">Marathwada, Maharashtra</option>
+     <option value="ludhiana">Ludhiana, Punjab</option>
+     <option value="wayanad">Wayanad, Kerala</option>
+     <option value="anantapur">Anantapur, Andhra Pradesh</option><option value="alappuzha">Alappuzha (Kuttanad), Kerala</option><option value="thanjavur">Thanjavur, Tamil Nadu</option><option value="guntur">Guntur, Andhra Pradesh</option><option value="warangal">Warangal, Telangana</option><option value="yavatmal">Yavatmal, Maharashtra</option><option value="kodagu">Kodagu, Karnataka</option><option value="indore">Indore, Madhya Pradesh</option><option value="patna">Patna, Bihar</option>
+    </select>
+    <button class="btn" id="fetch" type="button" style="margin-top:16px;width:100%">Fetch satellite data</button><p class="dq" style="margin:10px 0 0;font-size:.85rem;color:var(--muted)">Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates.</p><p id="fetchStatus" aria-live="polite" style="margin:8px 0 0;font-size:.85rem;color:var(--muted)"></p>
+    <label for="crop">Crop</label>
+    <select id="crop">
+     <option value="rice">Paddy</option><option value="cotton">Cotton</option><option value="coffee">Coffee and pepper</option><option value="wheat">Wheat</option><option value="soy">Soybean</option>
+    </select>
+    <label for="soil">Soil moisture, top 30 cm <span id="soilV"></span></label>
+    <input type="range" id="soil" min="5" max="55" step="1">
+    <label for="rain">Rainfall vs. 30-year normal <span id="rainV"></span></label>
+    <input type="range" id="rain" min="-80" max="120" step="5">
+    <label for="onset">Monsoon onset delay <span id="onsetV"></span></label>
+    <input type="range" id="onset" min="0" max="30" step="1">
+    <details class="more"><summary>More inputs (optional)</summary>
+    <label for="ndvi">Vegetation trend (NDVI, 3 weeks) <span id="ndviV"></span></label>
+    <input type="range" id="ndvi" min="-0.2" max="0.2" step="0.01">
+    <label for="temp">Temperature anomaly <span id="tempV"></span></label>
+    <input type="range" id="temp" min="-2" max="4" step="0.5">
+    </details>
+   </div>
+
+   <div class="panel">
+    <p id="range" style="margin:0 0 16px;color:var(--muted);font-weight:500"></p><div class="gauges" id="gauges"></div>
+    <div class="chart-wrap"><svg id="chart" viewBox="0 0 640 260" role="img" aria-label="Forecast weekly rainfall against crop water need for the next eight weeks"></svg></div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Forecast rainfall</span><span><i style="background:var(--warn)"></i>Crop water need</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:28px;flex-wrap:wrap"><h3 style="font-size:1.3rem">Mitigation plan</h3><button class="btn" id="listen" type="button" aria-pressed="false" style="padding:9px 16px">🔊 Listen</button></div><p id="listenNote" aria-live="polite" style="margin:6px 0 0;font-size:.85rem;color:var(--bad)"></p>
+    <p id="summary" style="margin:6px 0 0;color:var(--muted)"></p>
+    <ol class="plan" id="plan"></ol>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="analysis" class="ax"><div class="wrap">
+<h2>Satellite data, risk forecast and mitigation plan</h2>
+<p class="lead">Everything below follows the plot you set above. Change the region, crop or sliders and all of it recalculates.</p>
+<label for="fsz" style="display:inline-block">Farm size (hectares)</label> <input type="number" id="fsz" value="1" min="0.1" step="0.1" style="width:90px;padding:8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)">
+<h3>1. Data feeds</h3><div class="ax-grid" id="axFeeds"></div>
+
+<h3>2. Risk outlook: next 7, 15, 30 and 60 days</h3>
+<div class="panel"><div class="chart-wrap"><svg id="axChart" viewBox="0 0 640 250" role="img" aria-label="Projected risk scores for drought, excess rain, heat stress and disease over 7, 15, 30 and 60 days"></svg></div><div class="legend" id="axLeg"></div>
+<div class="ax-concl" id="axConc"></div></div>
+<h3>3. Expected yield and best-suited crops</h3><div class="ax-grid" id="axYield"></div>
+<h3>4. Risk register: likelihood, impact and class</h3>
+<p class="lead" style="margin-bottom:12px">Likelihood comes from the current inputs; impact is the expected hit to operations and income. Class: priority score (likelihood × impact) of 40+ is High, 20+ is Medium.</p>
+<div class="ax-crit" id="axCrit"></div>
+<div class="scroll" style="margin-top:16px"><table><thead><tr><th>Category</th><th>Risk</th><th>Likelihood</th><th>Impact</th><th>Class</th></tr></thead><tbody id="axReg"></tbody></table></div>
+<h3>5. Preventive and mitigation measures</h3>
+<div class="scroll"><table><thead><tr><th>Risk</th><th>Mitigation measures</th><th>Status now</th></tr></thead><tbody id="axMit"></tbody></table></div>
+<div class="mit-cards" style="margin-top:18px" id="axPlans"></div>
+<h3>6. Conclusive farm risk mitigation plan</h3>
+<div class="scroll"><table><thead><tr><th>Component</th><th>Details</th></tr></thead><tbody id="axPlan"></tbody></table></div>
+<h3>7. Actionable recommendations</h3><ol class="ax-act" id="axAct"></ol>
+<button class="btn no-print" type="button" onclick="window.print()" style="margin-top:12px">Print or save this plan</button>
+</div></section>
+
+<section style="padding-top:0">
+ <div class="wrap">
+  <h2>How a forecast is made</h2>
+  <p class="lead">Four stages run on every plot, refreshed as new passes and sensor readings arrive.</p>
+  <div class="pipe">
+   <div><h3>Observe</h3><p>Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.</p></div>
+   <div><h3>Ground-truth</h3><p>Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.</p></div>
+   <div><h3>Forecast</h3><p>A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.</p></div>
+   <div><h3>Advise</h3><p>Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.</p></div>
+  </div>
+ </div>
+</section>
+
+<section style="padding-top:0">
+ <div class="wrap">
+  <h2>What goes in, what comes out</h2>
+  <p class="lead">Every output traces back to a source you can inspect.</p>
+  <div class="scroll"><table>
+   <tr><th>Input</th><th>Source</th><th>What it tells us</th></tr>
+   <tr><td>Radar backscatter</td><td>Copernicus Sentinel-1</td><td>Surface soil moisture through cloud, vital in monsoon months</td></tr>
+   <tr><td>Multispectral imagery</td><td>Copernicus Sentinel-2, ISRO Resourcesat</td><td>Crop vigour, canopy water content, early stress</td></tr>
+   <tr><td>Rainfall and cloud motion</td><td>INSAT series, IMD records</td><td>Nowcasts and the long baseline for anomalies</td></tr>
+   <tr><td>Reanalysis climate data</td><td>Copernicus ERA5</td><td>Temperature, humidity and wind history for seasonal patterns</td></tr>
+   <tr><td>Soil sensor feeds</td><td>Field probes over LoRaWAN or MQTT</td><td>Ground-truth moisture and temperature at root depth</td></tr>
+  </table></div>
+ </div>
+</section>
+
+
+<footer><div class="wrap">Varsha. Built for farmers, cooperatives and agri-insurers who need to act before the weather does.</div></footer>
+
+<script>
+const $=id=>document.getElementById(id);
+const LOC={en:'en-IN',hi:'hi-IN',ml:'ml-IN',ta:'ta-IN',te:'te-IN',mr:'mr-IN'};
+let lang='en';
+try{const l=localStorage.getItem('varsha-lang');if(LOC[l])lang=l}catch(e){}
+const TODAY=new Date();
+const PRESET={
+ alappuzha:{soil:50,rain:60,ndvi:0.00,onset:3,temp:0,crop:'rice'},
+ thanjavur:{soil:22,rain:-25,ndvi:-0.04,onset:8,temp:1.5,crop:'rice'},
+ guntur:{soil:17,rain:-42,ndvi:-0.07,onset:10,temp:2,crop:'cotton'},
+ warangal:{soil:30,rain:10,ndvi:0.02,onset:4,temp:1,crop:'cotton'},
+ yavatmal:{soil:12,rain:-50,ndvi:-0.10,onset:8,temp:2.5,crop:'cotton'},
+ kodagu:{soil:48,rain:95,ndvi:0.01,onset:0,temp:-1,crop:'coffee'},
+ indore:{soil:28,rain:5,ndvi:0.03,onset:8,temp:1,crop:'soy'},
+ patna:{soil:22,rain:-40,ndvi:-0.05,onset:2,temp:0.5,crop:'rice'},
+ palakkad:{soil:34,rain:25,ndvi:0.03,onset:3,temp:0.5,crop:'rice'},
+ marathwada:{soil:14,rain:-45,ndvi:-0.09,onset:8,temp:2.5,crop:'soy'},
+ ludhiana:{soil:26,rain:-10,ndvi:0.01,onset:2,temp:1.5,crop:'wheat'},
+ wayanad:{soil:46,rain:85,ndvi:0.02,onset:3,temp:-0.5,crop:'coffee'},
+ anantapur:{soil:10,rain:-45,ndvi:-0.12,onset:21,temp:3,crop:'cotton'}
+};
+const CROP={rice:{d:1.1,f:.7,u:1.0,need:55},cotton:{d:.85,f:1.1,u:1.0,need:38},coffee:{d:1,f:1,u:1.2,need:42},wheat:{d:.95,f:1.1,u:1.0,need:30},soy:{d:1,f:1.15,u:1.0,need:40}};
+
+/* Static page text: English text is the key */
+const S={hi:{
+"Try the engine":"इंजन आज़माएँ",
+"Know what the next 8 weeks will do to your plot.":"जानिए अगले 8 हफ़्ते आपके खेत पर क्या असर डालेंगे।",
+"Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.":"वर्षा सैटेलाइट तस्वीरों, खेत में लगे मिट्टी सेंसरों और दशकों के मानसून रिकॉर्ड को जोड़कर हर खेत के स्तर पर सूखे, बेमौसम बारिश और रोग के खतरे का अनुमान लगाती है, और फिर बताती है कि आपको क्या करना है।",
+"Run a plot forecast":"खेत का पूर्वानुमान देखें",
+"Forecast a plot":"खेत का पूर्वानुमान",
+"Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.":"क्षेत्र और फसल चुनें, या इनपुट खुद बदलें। जोखिम स्कोर और कार्य योजना तुरंत बदल जाएँगे।",
+"Region preset":"क्षेत्र",
+"Palakkad, Kerala":"पालक्काड, केरल","Marathwada, Maharashtra":"मराठवाड़ा, महाराष्ट्र","Ludhiana, Punjab":"लुधियाना, पंजाब","Wayanad, Kerala":"वायनाड, केरल","Anantapur, Andhra Pradesh":"अनंतपुर, आंध्र प्रदेश",
+"Crop":"फसल","Paddy":"धान","Cotton":"कपास","Coffee and pepper":"कॉफी और काली मिर्च","Wheat":"गेहूं","Soybean":"सोयाबीन",
+"Soil moisture, top 30 cm":"मिट्टी की नमी, ऊपरी 30 सेमी",
+"Rainfall vs. 30-year normal":"बारिश (30 साल के सामान्य से तुलना)",
+"Vegetation trend (NDVI, 3 weeks)":"वनस्पति रुझान (NDVI, 3 सप्ताह)",
+"Monsoon onset delay":"मानसून आने में देरी",
+"Temperature anomaly":"तापमान में अंतर",
+"Forecast rainfall":"अनुमानित बारिश","Crop water need":"फसल की पानी की ज़रूरत",
+"Mitigation plan":"जोखिम कम करने की योजना",
+"How a forecast is made":"पूर्वानुमान कैसे बनता है",
+"Four stages run on every plot, refreshed as new passes and sensor readings arrive.":"हर खेत पर चार चरण चलते हैं, और नई सैटेलाइट तस्वीरें व सेंसर रीडिंग आने पर ताज़ा होते हैं।",
+"Observe":"देखना","Ground-truth":"ज़मीनी जाँच","Forecast":"अनुमान","Advise":"सलाह",
+"Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.":"कोपरनिकस के सेंटिनल-1 रडार और सेंटिनल-2 ऑप्टिकल चित्र, साथ में इसरो और इन्सैट के उत्पाद, बादलों के पार मिट्टी की नमी, फसल की सेहत और बारिश का अनुमान देते हैं।",
+"Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.":"कम बिजली वाले मिट्टी के सेंसर नमी, तापमान और खारापन बताते हैं। वे सैटेलाइट संकेत को खेत के स्तर पर सही बनाते हैं।",
+"A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.":"पुराने मानसून रिकॉर्ड और जलवायु डेटा पर प्रशिक्षित मॉडल हर खेत के लिए साप्ताहिक बारिश और तनाव का अनुमान देता है, अनिश्चितता के दायरे के साथ।",
+"Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.":"जोखिम तारीख़ वाली सलाह बन जाते हैं: कब सिंचाई करें, बुवाई टालें, पानी निकालें, छिड़काव करें या जल्दी कटाई करें, फसल और उसके चरण के अनुसार।",
+"What goes in, what comes out":"क्या अंदर जाता है, क्या बाहर आता है",
+"Every output traces back to a source you can inspect.":"हर नतीजे का स्रोत आप खुद जाँच सकते हैं।",
+"Input":"इनपुट","Source":"स्रोत","What it tells us":"यह क्या बताता है",
+"Radar backscatter":"रडार संकेत","Surface soil moisture through cloud, vital in monsoon months":"बादलों के पार सतह की मिट्टी की नमी, मानसून के महीनों में बेहद ज़रूरी",
+"Multispectral imagery":"बहु-स्पेक्ट्रल चित्र","Crop vigour, canopy water content, early stress":"फसल की सेहत, पत्तों में पानी की मात्रा, शुरुआती तनाव",
+"Rainfall and cloud motion":"बारिश और बादलों की गति","Nowcasts and the long baseline for anomalies":"तुरंत का पूर्वानुमान और असामान्यता पहचानने का लंबा आधार",
+"Reanalysis climate data":"जलवायु पुनर्विश्लेषण डेटा","Temperature, humidity and wind history for seasonal patterns":"मौसमी पैटर्न के लिए तापमान, नमी और हवा का इतिहास",
+"Soil sensor feeds":"मिट्टी सेंसर डेटा","Ground-truth moisture and temperature at root depth":"जड़ों की गहराई पर असली नमी और तापमान",
+"About this demo.":"इस डेमो के बारे में।",
+"The scores above come from a transparent rule-based model so you can see how each input moves the risk. They are illustrative, not a validated forecast. A production deployment would replace the rules with models trained and calibrated on real Sentinel, ISRO, IMD and sensor data for each district.":"ऊपर के स्कोर एक पारदर्शी नियम-आधारित मॉडल से आते हैं ताकि आप देख सकें कि हर इनपुट जोखिम को कैसे बदलता है। ये केवल उदाहरण हैं, प्रमाणित पूर्वानुमान नहीं। असली प्रणाली में इन नियमों की जगह हर जिले के असली सेंटिनल, इसरो, IMD और सेंसर डेटा पर प्रशिक्षित मॉडल होंगे।",
+"Varsha. Built for farmers, cooperatives and agri-insurers who need to act before the weather does.":"वर्षा। किसानों, सहकारी समितियों और कृषि बीमाकर्ताओं के लिए, जिन्हें मौसम से पहले कदम उठाना है।"
+},ml:{
+"Try the engine":"എഞ്ചിൻ പരീക്ഷിക്കൂ",
+"Know what the next 8 weeks will do to your plot.":"അടുത്ത 8 ആഴ്ച നിങ്ങളുടെ പറമ്പിൽ എന്ത് സംഭവിക്കുമെന്ന് അറിയൂ.",
+"Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.":"ഉപഗ്രഹ ചിത്രങ്ങൾ, മണ്ണിലെ സെൻസറുകൾ, പതിറ്റാണ്ടുകളുടെ മൺസൂൺ രേഖകൾ എന്നിവ ചേർത്ത് ഓരോ കൃഷിയിടത്തിലെയും വരൾച്ച, അകാല മഴ, രോഗഭീഷണി എന്നിവ വർഷ പ്രവചിക്കുന്നു; എന്തു ചെയ്യണമെന്നും പറഞ്ഞുതരുന്നു.",
+"Run a plot forecast":"പ്ലോട്ട് പ്രവചനം കാണൂ",
+"Forecast a plot":"പ്ലോട്ട് പ്രവചനം",
+"Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.":"പ്രദേശവും വിളയും തിരഞ്ഞെടുക്കൂ, അല്ലെങ്കിൽ ഇൻപുട്ടുകൾ സ്വയം മാറ്റൂ. റിസ്ക് സ്കോറുകളും പ്രവർത്തന പദ്ധതിയും ഉടൻ മാറും.",
+"Region preset":"പ്രദേശം",
+"Palakkad, Kerala":"പാലക്കാട്, കേരളം","Marathwada, Maharashtra":"മറാത്ത്‌വാഡ, മഹാരാഷ്ട്ര","Ludhiana, Punjab":"ലുധിയാന, പഞ്ചാബ്","Wayanad, Kerala":"വയനാട്, കേരളം","Anantapur, Andhra Pradesh":"അനന്തപുർ, ആന്ധ്രാപ്രദേശ്",
+"Crop":"വിള","Paddy":"നെല്ല്","Cotton":"പരുത്തി","Coffee and pepper":"കാപ്പിയും കുരുമുളകും","Wheat":"ഗോതമ്പ്","Soybean":"സോയാബീൻ",
+"Soil moisture, top 30 cm":"മണ്ണിലെ ഈർപ്പം, മുകളിലെ 30 സെ.മീ",
+"Rainfall vs. 30-year normal":"മഴ (30 വർഷത്തെ സാധാരണയുമായി താരതമ്യം)",
+"Vegetation trend (NDVI, 3 weeks)":"സസ്യവളർച്ചാ പ്രവണത (NDVI, 3 ആഴ്ച)",
+"Monsoon onset delay":"മൺസൂൺ എത്തുന്നതിലെ കാലതാമസം",
+"Temperature anomaly":"താപനിലയിലെ വ്യത്യാസം",
+"Forecast rainfall":"പ്രവചിച്ച മഴ","Crop water need":"വിളയ്ക്ക് വേണ്ട വെള്ളം",
+"Mitigation plan":"അപകടം കുറയ്ക്കാനുള്ള പദ്ധതി",
+"How a forecast is made":"പ്രവചനം എങ്ങനെ ഉണ്ടാകുന്നു",
+"Four stages run on every plot, refreshed as new passes and sensor readings arrive.":"ഓരോ പ്ലോട്ടിലും നാല് ഘട്ടങ്ങൾ പ്രവർത്തിക്കുന്നു; പുതിയ ഉപഗ്രഹ ചിത്രങ്ങളും സെൻസർ വിവരങ്ങളും വരുമ്പോൾ പുതുക്കുന്നു.",
+"Observe":"നിരീക്ഷണം","Ground-truth":"നിലത്തെ പരിശോധന","Forecast":"പ്രവചനം","Advise":"ഉപദേശം",
+"Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.":"കോപ്പർനിക്കസിന്റെ സെന്റിനൽ-1 റഡാർ, സെന്റിനൽ-2 ചിത്രങ്ങൾ, ഒപ്പം ഐഎസ്ആർഒ, ഇൻസാറ്റ് ഉൽപ്പന്നങ്ങൾ എന്നിവ മേഘങ്ങൾക്കപ്പുറമുള്ള മണ്ണിലെ ഈർപ്പം, വിളയുടെ ആരോഗ്യം, മഴയുടെ കണക്ക് എന്നിവ നൽകുന്നു.",
+"Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.":"കുറഞ്ഞ വൈദ്യുതി ഉപയോഗിക്കുന്ന സെൻസറുകൾ ഈർപ്പം, താപനില, ഉപ്പുരസം എന്നിവ അറിയിക്കുന്നു. ഉപഗ്രഹ സിഗ്നലിനെ കൃഷിയിടത്തിന്റെ തലത്തിൽ ശരിയാക്കാൻ ഇത് സഹായിക്കുന്നു.",
+"A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.":"പഴയ മൺസൂൺ രേഖകളിലും കാലാവസ്ഥാ ഡാറ്റയിലും പരിശീലിപ്പിച്ച മോഡൽ ഓരോ പ്ലോട്ടിനും ആഴ്ചതോറുമുള്ള മഴയും സമ്മർദ്ദവും പ്രവചിക്കുന്നു, അനിശ്ചിതത്വത്തിന്റെ പരിധിയോടെ.",
+"Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.":"അപകടസാധ്യതകൾ തീയതി സഹിതമുള്ള നിർദേശങ്ങളാകുന്നു: എപ്പോൾ നനയ്ക്കണം, വിതയ്ക്കൽ വൈകിപ്പിക്കണം, വെള്ളം ഒഴുക്കണം, തളിക്കണം, നേരത്തേ വിളവെടുക്കണം എന്നിവ, വിളയ്ക്കും വളർച്ചാഘട്ടത്തിനും അനുസരിച്ച്.",
+"What goes in, what comes out":"എന്ത് അകത്തേക്ക്, എന്ത് പുറത്തേക്ക്",
+"Every output traces back to a source you can inspect.":"ഓരോ ഫലത്തിന്റെയും ഉറവിടം നിങ്ങൾക്ക് പരിശോധിക്കാം.",
+"Input":"ഇൻപുട്ട്","Source":"ഉറവിടം","What it tells us":"ഇത് എന്ത് പറയുന്നു",
+"Radar backscatter":"റഡാർ സിഗ്നൽ","Surface soil moisture through cloud, vital in monsoon months":"മേഘങ്ങൾക്കപ്പുറമുള്ള മണ്ണിന്റെ മുകൾഭാഗത്തെ ഈർപ്പം, മൺസൂൺ മാസങ്ങളിൽ വളരെ പ്രധാനം",
+"Multispectral imagery":"മൾട്ടിസ്പെക്ട്രൽ ചിത്രങ്ങൾ","Crop vigour, canopy water content, early stress":"വിളയുടെ കരുത്ത്, ഇലകളിലെ ജലാംശം, ആദ്യഘട്ട സമ്മർദ്ദം",
+"Rainfall and cloud motion":"മഴയും മേഘചലനവും","Nowcasts and the long baseline for anomalies":"തൽക്ഷണ പ്രവചനവും അസാധാരണത്വം തിരിച്ചറിയാനുള്ള ദീർഘകാല അടിസ്ഥാനവും",
+"Reanalysis climate data":"കാലാവസ്ഥാ പുനർവിശകലന ഡാറ്റ","Temperature, humidity and wind history for seasonal patterns":"കാലികമായ രീതികൾക്കായി താപനില, ഈർപ്പം, കാറ്റ് എന്നിവയുടെ ചരിത്രം",
+"Soil sensor feeds":"മണ്ണ് സെൻസർ ഡാറ്റ","Ground-truth moisture and temperature at root depth":"വേരിന്റെ ആഴത്തിലെ യഥാർത്ഥ ഈർപ്പവും താപനിലയും",
+"About this demo.":"ഈ ഡെമോയെക്കുറിച്ച്.",
+"The scores above come from a transparent rule-based model so you can see how each input moves the risk. They are illustrative, not a validated forecast. A production deployment would replace the rules with models trained and calibrated on real Sentinel, ISRO, IMD and sensor data for each district.":"മുകളിലെ സ്കോറുകൾ ലളിതമായ നിയമങ്ങളിലൂടെ ഉണ്ടാക്കിയതാണ്, ഓരോ ഇൻപുട്ടും റിസ്കിനെ എങ്ങനെ മാറ്റുന്നുവെന്ന് കാണാൻ. ഇവ ഉദാഹരണങ്ങൾ മാത്രമാണ്, സ്ഥിരീകരിച്ച പ്രവചനമല്ല. യഥാർത്ഥ സംവിധാനത്തിൽ ഓരോ ജില്ലയിലെയും സെന്റിനൽ, ഐഎസ്ആർഒ, IMD, സെൻസർ ഡാറ്റയിൽ പരിശീലിപ്പിച്ച മോഡലുകൾ ഈ നിയമങ്ങൾക്ക് പകരം വരും.",
+"Varsha. Built for farmers, cooperatives and agri-insurers who need to act before the weather does.":"വർഷ. കാലാവസ്ഥയ്ക്കു മുൻപേ നടപടിയെടുക്കേണ്ട കർഷകർക്കും സഹകരണസംഘങ്ങൾക്കും കാർഷിക ഇൻഷുറൻസ് സ്ഥാപനങ്ങൾക്കും വേണ്ടി."
+}};
+const TITLE={en:'Varsha — micro-climate risk for every plot',hi:'वर्षा — हर खेत के लिए सूक्ष्म-जलवायु जोखिम',ml:'വർഷ — ഓരോ പ്ലോട്ടിനും സൂക്ഷ്മ കാലാവസ്ഥാ അപകടസൂചന'};
+
+/* Dynamic text per language */
+const D={
+en:{g:['Drought','Excess rain','Disease pressure'],lv:['Low','Moderate','High'],days:'days',
+ crop:{rice:'paddy',cotton:'cotton',coffee:'coffee and pepper',wheat:'wheat',soy:'soybean'},
+ today:'Today',range:(a,b)=>`Forecast window: ${a} to ${b}`,
+ calm:(c,l)=>`Conditions look steady for ${c}. Estimated yield at risk: about ${l}%.`,
+ main:(c,t,l)=>`Main threat for ${c}: ${t.toLowerCase()}. Estimated yield at risk if no action is taken: about ${l}%.`,
+ w:{now:'This week',w2:'Next 2 weeks',d10:'Within 10 days',sow:'Before sowing',rain:'Before heavy rain',hold:'If forecast holds',weekly:'Weekly',noon:'Midday',on:'Ongoing'},
+ irr:(s,n)=>['Schedule protective irrigation',`Soil moisture is ${s.soil}% and ${n} of the next 8 weeks fall well short of crop need. Irrigate at critical growth stages and keep a reserve for flowering.`],
+ cons:(r)=>['Conserve soil water',r?'Use alternate wetting and drying and hold bund water.':'Apply mulch and cut tillage to slow evaporation.'],
+ seed:['Switch to short-duration varieties or delay sowing','Sowing into a long dry spell risks poor germination. Check with your agricultural office on contingency seed.'],
+ onset:['Wait for sustained rain','Onset is running late. Sow only after a soaking rain event rather than the first showers.'],
+ drain:(s)=>['Clear drainage channels',`Rainfall is ${s.rain>0?'+':''}${s.rain}% against normal. Open field drains and move inputs and harvested produce off low ground.`],
+ fert:['Hold off on fertiliser','Split nitrogen doses and apply only in dry windows to avoid leaching and runoff.'],
+ harv:['Harvest early where mature','Standing water and wet pods or bolls lose quality quickly.'],
+ scout:(c)=>['Scout for fungal disease',c?'Watch for leaf rust and berry disease. Plan a preventive copper spray between rain spells.':'Inspect lower canopy leaves and spray preventively during a dry window if lesions appear.'],
+ heat:['Reduce heat stress','Irrigate in early morning or evening and avoid spraying during peak heat.'],
+ none:['Continue normal practice','No risk crosses the action threshold. Varsha will keep watching new satellite passes and sensor readings.']},
+hi:{g:['सूखा','अधिक बारिश','रोग का दबाव'],lv:['कम','मध्यम','अधिक'],days:'दिन',
+ crop:{rice:'धान',cotton:'कपास',coffee:'कॉफी और काली मिर्च',wheat:'गेहूं',soy:'सोयाबीन'},
+ today:'आज',range:(a,b)=>`पूर्वानुमान अवधि: ${a} से ${b}`,
+ calm:(c,l)=>`${c} के लिए हालात स्थिर दिखते हैं। अनुमानित उपज जोखिम: लगभग ${l}%।`,
+ main:(c,t,l)=>`${c} के लिए मुख्य खतरा: ${t}। कुछ न करने पर उपज का अनुमानित जोखिम: लगभग ${l}%।`,
+ w:{now:'इस हफ़्ते',w2:'अगले 2 हफ़्ते',d10:'10 दिन के भीतर',sow:'बुवाई से पहले',rain:'तेज़ बारिश से पहले',hold:'अगर पूर्वानुमान सही रहा',weekly:'हर हफ़्ते',noon:'दोपहर',on:'लगातार'},
+ irr:(s,n)=>['सुरक्षात्मक सिंचाई की योजना बनाएँ',`मिट्टी में नमी ${s.soil}% है और अगले 8 में से ${n} हफ़्तों में बारिश फसल की ज़रूरत से काफ़ी कम रहेगी। अहम चरणों में सिंचाई करें और फूल आने के लिए पानी बचाकर रखें।`],
+ cons:(r)=>['मिट्टी का पानी बचाएँ',r?'बारी-बारी से गीला और सूखा करने की विधि अपनाएँ और मेड़ों में पानी रोकें।':'मल्च बिछाएँ और जुताई कम करें ताकि वाष्पीकरण घटे।'],
+ seed:['कम अवधि वाली किस्में लगाएँ या बुवाई टालें','लंबे सूखे में बुवाई से अंकुरण कमज़ोर हो सकता है। वैकल्पिक बीज के लिए कृषि कार्यालय से पूछें।'],
+ onset:['लगातार बारिश का इंतज़ार करें','मानसून देर से आ रहा है। पहली फुहारों पर नहीं, भरपूर बारिश के बाद ही बुवाई करें।'],
+ drain:(s)=>['जल निकासी की नालियाँ साफ़ करें',`बारिश सामान्य से ${s.rain>0?'+':''}${s.rain}% है। खेत की नालियाँ खोलें और खाद-बीज व कटी फसल को निचले हिस्से से हटाएँ।`],
+ fert:['खाद डालना रोकें','नाइट्रोजन को कई बार में दें और केवल सूखे समय में डालें ताकि बहकर न जाए।'],
+ harv:['पकी फसल जल्दी काटें','खड़े पानी और गीली फलियों या डोडों की गुणवत्ता जल्दी घटती है।'],
+ scout:(c)=>['फफूंद रोग की जाँच करें',c?'पत्ती के रतुआ और बेरी रोग पर नज़र रखें। बारिश के बीच बचाव के लिए कॉपर का छिड़काव करें।':'निचली पत्तियों को देखें और धब्बे दिखें तो सूखे समय में बचाव का छिड़काव करें।'],
+ heat:['गर्मी का असर घटाएँ','सुबह या शाम को सिंचाई करें और तेज़ गर्मी में छिड़काव न करें।'],
+ none:['सामान्य तरीके जारी रखें','कोई जोखिम कार्रवाई की सीमा तक नहीं पहुँचा। वर्षा नई सैटेलाइट तस्वीरों और सेंसर रीडिंग पर नज़र रखेगी।']},
+ml:{g:['വരൾച്ച','അധിക മഴ','രോഗഭീഷണി'],lv:['കുറവ്','ഇടത്തരം','ഉയർന്നത്'],days:'ദിവസം',
+ crop:{rice:'നെല്ല്',cotton:'പരുത്തി',coffee:'കാപ്പിയും കുരുമുളകും',wheat:'ഗോതമ്പ്',soy:'സോയാബീൻ'},
+ today:'ഇന്ന്',range:(a,b)=>`പ്രവചന കാലയളവ്: ${a} മുതൽ ${b} വരെ`,
+ calm:(c,l)=>`${c}യുടെ കാര്യത്തിൽ സ്ഥിതി സ്ഥിരമായി കാണുന്നു. വിളവിന് അപകടസാധ്യത: ഏകദേശം ${l}%.`,
+ main:(c,t,l)=>`${c}യ്ക്കുള്ള പ്രധാന ഭീഷണി: ${t}. നടപടി എടുത്തില്ലെങ്കിൽ വിളവിന് അപകടസാധ്യത: ഏകദേശം ${l}%.`,
+ w:{now:'ഈ ആഴ്ച',w2:'അടുത്ത 2 ആഴ്ച',d10:'10 ദിവസത്തിനുള്ളിൽ',sow:'വിതയ്ക്കുന്നതിനു മുൻപ്',rain:'കനത്ത മഴയ്ക്കു മുൻപ്',hold:'പ്രവചനം ശരിയായാൽ',weekly:'ആഴ്ചതോറും',noon:'ഉച്ചസമയം',on:'തുടർച്ചയായി'},
+ irr:(s,n)=>['സംരക്ഷണ നന ആസൂത്രണം ചെയ്യുക',`മണ്ണിലെ ഈർപ്പം ${s.soil}% ആണ്; അടുത്ത 8 ആഴ്ചയിൽ ${n} ആഴ്ച മഴ വിളയ്ക്ക് വേണ്ടതിലും വളരെ കുറവായിരിക്കും. പ്രധാന വളർച്ചാഘട്ടങ്ങളിൽ നനയ്ക്കുക, പൂക്കുന്ന സമയത്തേക്ക് വെള്ളം കരുതിവയ്ക്കുക.`],
+ cons:(r)=>['മണ്ണിലെ വെള്ളം സംരക്ഷിക്കുക',r?'ഇടവിട്ട് നനയ്ക്കലും ഉണക്കലും രീതി പിന്തുടരുക, വരമ്പുകളിൽ വെള്ളം നിർത്തുക.':'പുതയിടുകയും ഉഴവ് കുറയ്ക്കുകയും ചെയ്ത് ബാഷ്പീകരണം കുറയ്ക്കുക.'],
+ seed:['കുറഞ്ഞ കാലയളവിലെ ഇനങ്ങളിലേക്ക് മാറുക അല്ലെങ്കിൽ വിതയ്ക്കൽ വൈകിപ്പിക്കുക','നീണ്ട വരൾച്ചയിൽ വിതച്ചാൽ മുളയ്ക്കൽ മോശമാകാം. ബദൽ വിത്തിനായി കൃഷിഭവനുമായി ബന്ധപ്പെടുക.'],
+ onset:['തുടർച്ചയായ മഴയ്ക്കായി കാത്തിരിക്കുക','മൺസൂൺ വൈകുന്നു. ആദ്യ ചാറ്റൽമഴയ്ക്കല്ല, നല്ല മഴ ലഭിച്ച ശേഷം മാത്രം വിതയ്ക്കുക.'],
+ drain:(s)=>['നീർച്ചാലുകൾ വൃത്തിയാക്കുക',`മഴ സാധാരണയെക്കാൾ ${s.rain>0?'+':''}${s.rain}% ആണ്. പാടത്തെ ചാലുകൾ തുറക്കുക, വളവും വിളവെടുത്ത ഉൽപ്പന്നങ്ങളും താഴ്ന്ന സ്ഥലത്തുനിന്ന് മാറ്റുക.`],
+ fert:['വളം ഇടുന്നത് നിർത്തിവയ്ക്കുക','നൈട്രജൻ പലതവണയായി, മഴയില്ലാത്ത സമയത്ത് മാത്രം നൽകുക; ഒലിച്ചുപോകുന്നത് ഒഴിവാക്കാം.'],
+ harv:['മൂത്ത വിള നേരത്തേ വിളവെടുക്കുക','വെള്ളം കെട്ടിനിൽക്കുന്നതും നനഞ്ഞ കായ്കളും വേഗം ഗുണം നഷ്ടപ്പെടുത്തും.'],
+ scout:(c)=>['കുമിൾരോഗം പരിശോധിക്കുക',c?'ഇലതുരുമ്പും കായ് രോഗവും ശ്രദ്ധിക്കുക. മഴയ്ക്കിടയിൽ പ്രതിരോധമായി കോപ്പർ തളിക്കാൻ ആസൂത്രണം ചെയ്യുക.':'താഴത്തെ ഇലകൾ നോക്കുക; പാടുകൾ കണ്ടാൽ മഴയില്ലാത്ത സമയത്ത് പ്രതിരോധ മരുന്ന് തളിക്കുക.'],
+ heat:['ചൂടിന്റെ ആഘാതം കുറയ്ക്കുക','അതിരാവിലെയോ വൈകുന്നേരമോ നനയ്ക്കുക, കടുത്ത ചൂടിൽ തളിക്കരുത്.'],
+ none:['സാധാരണ രീതി തുടരുക','ഒരു അപകടവും നടപടി വേണ്ട നിലയിലെത്തിയിട്ടില്ല. പുതിയ ഉപഗ്രഹ ചിത്രങ്ങളും സെൻസർ വിവരങ്ങളും വർഷ നിരീക്ഷിക്കും.']}
+};
+
+S.ta={
+"Try the engine":"இன்ஜினை முயற்சிக்கவும்",
+"Know what the next 8 weeks will do to your plot.":"அடுத்த 8 வாரங்களில் உங்கள் நிலத்துக்கு என்ன நடக்கும் என்பதை அறியுங்கள்.",
+"Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.":"வர்ஷா செயற்கைக்கோள் படங்கள், நிலத்தில் பொருத்தப்பட்ட மண் உணரிகள், பல ஆண்டுகளின் பருவமழைப் பதிவுகளை இணைத்து, ஒவ்வொரு நிலத்திலும் வறட்சி, பருவம் தவறிய மழை, நோய் அபாயம் ஆகியவற்றை முன்னறிவிக்கிறது; பிறகு என்ன செய்ய வேண்டும் என்றும் சொல்கிறது.",
+"Run a plot forecast":"நில முன்னறிவிப்பைப் பார்க்கவும்",
+"Forecast a plot":"நில முன்னறிவிப்பு",
+"Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.":"பகுதியையும் பயிரையும் தேர்ந்தெடுக்கவும், அல்லது உள்ளீடுகளை நீங்களே மாற்றவும். அபாய மதிப்பெண்களும் செயல் திட்டமும் உடனே மாறும்.",
+"Region preset":"பகுதி",
+"Palakkad, Kerala":"பாலக்காடு, கேரளா","Marathwada, Maharashtra":"மராத்வாடா, மகாராஷ்டிரா","Ludhiana, Punjab":"லூதியானா, பஞ்சாப்","Wayanad, Kerala":"வயநாடு, கேரளா","Anantapur, Andhra Pradesh":"அனந்தபுரம், ஆந்திரப் பிரதேசம்",
+"Crop":"பயிர்","Paddy":"நெல்","Cotton":"பருத்தி","Coffee and pepper":"காபி மற்றும் மிளகு","Wheat":"கோதுமை","Soybean":"சோயாபீன்",
+"Soil moisture, top 30 cm":"மண் ஈரப்பதம், மேல் 30 செ.மீ",
+"Rainfall vs. 30-year normal":"மழை (30 ஆண்டு சராசரியுடன் ஒப்பீடு)",
+"Vegetation trend (NDVI, 3 weeks)":"தாவரப் போக்கு (NDVI, 3 வாரங்கள்)",
+"Monsoon onset delay":"பருவமழை தொடங்குவதில் தாமதம்",
+"Temperature anomaly":"வெப்பநிலை வேறுபாடு",
+"Forecast rainfall":"முன்னறிவித்த மழை","Crop water need":"பயிருக்குத் தேவையான நீர்",
+"Mitigation plan":"அபாயம் குறைக்கும் திட்டம்",
+"How a forecast is made":"முன்னறிவிப்பு எப்படி உருவாகிறது",
+"Four stages run on every plot, refreshed as new passes and sensor readings arrive.":"ஒவ்வொரு நிலத்திலும் நான்கு படிகள் இயங்குகின்றன; புதிய செயற்கைக்கோள் படங்களும் உணரி தரவுகளும் வரும்போது புதுப்பிக்கப்படுகின்றன.",
+"Observe":"கவனிப்பு","Ground-truth":"நிலத்தில் சரிபார்ப்பு","Forecast":"முன்னறிவிப்பு","Advise":"ஆலோசனை",
+"Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.":"கோப்பர்நிகஸின் சென்டினல்-1 ரேடார், சென்டினல்-2 படங்கள், இஸ்ரோ மற்றும் இன்சாட் தயாரிப்புகள் மேகங்களுக்கு அப்பாலும் மண் ஈரப்பதம், பயிர் வலிமை, மழை அளவு ஆகியவற்றைத் தருகின்றன.",
+"Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.":"குறைந்த மின்சாரம் பயன்படுத்தும் மண் உணரிகள் ஈரப்பதம், வெப்பநிலை, உப்புத்தன்மையைத் தெரிவிக்கின்றன. செயற்கைக்கோள் சமிக்ஞையை நில அளவில் சரிசெய்ய அவை உதவுகின்றன.",
+"A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.":"பழைய பருவமழைப் பதிவுகள் மற்றும் காலநிலைத் தரவுகளில் பயிற்சி பெற்ற மாதிரி, ஒவ்வொரு நிலத்துக்கும் வாராந்திர மழை மற்றும் அழுத்தத்தை நிச்சயமின்மை வரம்புடன் கணிக்கிறது.",
+"Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.":"அபாயங்கள் தேதியுடன் கூடிய செயல்களாக மாறுகின்றன: எப்போது நீர் பாய்ச்சுவது, விதைப்பைத் தள்ளிப்போடுவது, நீரை வடிப்பது, தெளிப்பது, முன்கூட்டியே அறுவடை செய்வது என்பது பயிர் மற்றும் வளர்ச்சிக் கட்டத்துக்கு ஏற்ப.",
+"What goes in, what comes out":"என்ன உள்ளே, என்ன வெளியே",
+"Every output traces back to a source you can inspect.":"ஒவ்வொரு முடிவின் மூலத்தையும் நீங்களே சரிபார்க்கலாம்.",
+"Input":"உள்ளீடு","Source":"மூலம்","What it tells us":"இது என்ன சொல்கிறது",
+"Radar backscatter":"ரேடார் சமிக்ஞை","Surface soil moisture through cloud, vital in monsoon months":"மேகங்களுக்கு அப்பாலும் மேல்மண் ஈரப்பதம், பருவமழை மாதங்களில் மிக முக்கியம்",
+"Multispectral imagery":"பல-நிறமாலைப் படங்கள்","Crop vigour, canopy water content, early stress":"பயிர் வலிமை, இலைகளில் நீர் அளவு, ஆரம்ப அழுத்தம்",
+"Rainfall and cloud motion":"மழை மற்றும் மேக இயக்கம்","Nowcasts and the long baseline for anomalies":"உடனடி முன்னறிவிப்பு, அசாதாரணங்களை அறிய நீண்டகால அடிப்படை",
+"Reanalysis climate data":"காலநிலை மறுஆய்வுத் தரவு","Temperature, humidity and wind history for seasonal patterns":"பருவ முறைகளுக்கான வெப்பநிலை, ஈரப்பதம், காற்றின் வரலாறு",
+"Soil sensor feeds":"மண் உணரி தரவு","Ground-truth moisture and temperature at root depth":"வேர் ஆழத்தில் உண்மையான ஈரப்பதமும் வெப்பநிலையும்",
+"About this demo.":"இந்த டெமோ பற்றி.",
+"The scores above come from a transparent rule-based model so you can see how each input moves the risk. They are illustrative, not a validated forecast. A production deployment would replace the rules with models trained and calibrated on real Sentinel, ISRO, IMD and sensor data for each district.":"மேலுள்ள மதிப்பெண்கள் எளிய விதிகள் அடிப்படையிலான மாதிரியிலிருந்து வருகின்றன; ஒவ்வொரு உள்ளீடும் அபாயத்தை எப்படி மாற்றுகிறது என்பதைப் பார்க்க இது உதவும். இவை எடுத்துக்காட்டுகள் மட்டுமே, சரிபார்க்கப்பட்ட முன்னறிவிப்பு அல்ல. உண்மையான அமைப்பில் ஒவ்வொரு மாவட்டத்தின் சென்டினல், இஸ்ரோ, IMD, உணரி தரவுகளில் பயிற்சி பெற்ற மாதிரிகள் இந்த விதிகளுக்குப் பதிலாக வரும்.",
+"Varsha. Built for farmers, cooperatives and agri-insurers who need to act before the weather does.":"வர்ஷா. வானிலைக்கு முன்பே நடவடிக்கை எடுக்க வேண்டிய விவசாயிகள், கூட்டுறவு சங்கங்கள், வேளாண் காப்பீட்டு நிறுவனங்களுக்காக."
+};
+S.te={
+"Try the engine":"ఇంజిన్‌ను ప్రయత్నించండి",
+"Know what the next 8 weeks will do to your plot.":"రాబోయే 8 వారాల్లో మీ పొలానికి ఏమవుతుందో తెలుసుకోండి.",
+"Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.":"వర్ష ఉపగ్రహ చిత్రాలు, పొలంలోని నేల సెన్సర్లు, దశాబ్దాల వర్షాకాల రికార్డులను కలిపి, ప్రతి పొలంలో కరువు, అకాల వర్షం, వ్యాధి ముప్పును అంచనా వేస్తుంది; ఆ తర్వాత ఏం చేయాలో చెబుతుంది.",
+"Run a plot forecast":"పొలం అంచనా చూడండి",
+"Forecast a plot":"పొలం అంచనా",
+"Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.":"ప్రాంతాన్ని, పంటను ఎంచుకోండి, లేదా ఇన్‌పుట్‌లను మీరే మార్చండి. ముప్పు స్కోర్లు, కార్యాచరణ ప్రణాళిక వెంటనే మారతాయి.",
+"Region preset":"ప్రాంతం",
+"Palakkad, Kerala":"పాలక్కాడ్, కేరళ","Marathwada, Maharashtra":"మరాఠ్వాడా, మహారాష్ట్ర","Ludhiana, Punjab":"లూధియానా, పంజాబ్","Wayanad, Kerala":"వయనాడ్, కేరళ","Anantapur, Andhra Pradesh":"అనంతపురం, ఆంధ్రప్రదేశ్",
+"Crop":"పంట","Paddy":"వరి","Cotton":"పత్తి","Coffee and pepper":"కాఫీ మరియు మిరియాలు","Wheat":"గోధుమ","Soybean":"సోయాబీన్",
+"Soil moisture, top 30 cm":"నేల తేమ, పై 30 సెం.మీ",
+"Rainfall vs. 30-year normal":"వర్షపాతం (30 ఏళ్ల సగటుతో పోలిక)",
+"Vegetation trend (NDVI, 3 weeks)":"వృక్ష ధోరణి (NDVI, 3 వారాలు)",
+"Monsoon onset delay":"రుతుపవనాల రాకలో ఆలస్యం",
+"Temperature anomaly":"ఉష్ణోగ్రత తేడా",
+"Forecast rainfall":"అంచనా వర్షం","Crop water need":"పంటకు కావలసిన నీరు",
+"Mitigation plan":"ముప్పు తగ్గించే ప్రణాళిక",
+"How a forecast is made":"అంచనా ఎలా తయారవుతుంది",
+"Four stages run on every plot, refreshed as new passes and sensor readings arrive.":"ప్రతి పొలంలో నాలుగు దశలు నడుస్తాయి; కొత్త ఉపగ్రహ చిత్రాలు, సెన్సర్ రీడింగులు వచ్చినప్పుడు నవీకరించబడతాయి.",
+"Observe":"పరిశీలన","Ground-truth":"నేలపై ధృవీకరణ","Forecast":"అంచనా","Advise":"సలహా",
+"Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.":"కోపర్నికస్ సెంటినెల్-1 రాడార్, సెంటినెల్-2 చిత్రాలు, ఇస్రో మరియు ఇన్సాట్ ఉత్పత్తులు మేఘాల వెనుక కూడా నేల తేమ, పంట బలం, వర్షపాత అంచనాలను ఇస్తాయి.",
+"Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.":"తక్కువ విద్యుత్తు వాడే నేల సెన్సర్లు తేమ, ఉష్ణోగ్రత, లవణతను తెలియజేస్తాయి. ఉపగ్రహ సంకేతాన్ని పొలం స్థాయిలో సరిచేయడానికి అవి సహాయపడతాయి.",
+"A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.":"పాత వర్షాకాల రికార్డులు, వాతావరణ డేటాపై శిక్షణ పొందిన మోడల్ ప్రతి పొలానికి వారపు వర్షపాతం, ఒత్తిడిని అనిశ్చితి పరిధితో అంచనా వేస్తుంది.",
+"Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.":"ముప్పులు తేదీలతో కూడిన చర్యలుగా మారతాయి: ఎప్పుడు నీరు పెట్టాలి, విత్తనం వాయిదా వేయాలి, నీరు తీయాలి, పిచికారీ చేయాలి, ముందే కోయాలి అన్నది పంట, ఎదుగుదల దశకు తగినట్లు.",
+"What goes in, what comes out":"ఏం లోపలికి, ఏం బయటకు",
+"Every output traces back to a source you can inspect.":"ప్రతి ఫలితం మూలాన్ని మీరే తనిఖీ చేయవచ్చు.",
+"Input":"ఇన్‌పుట్","Source":"మూలం","What it tells us":"ఇది ఏం చెబుతుంది",
+"Radar backscatter":"రాడార్ సంకేతం","Surface soil moisture through cloud, vital in monsoon months":"మేఘాల వెనుక కూడా పై నేల తేమ, వర్షాకాల నెలల్లో అత్యంత కీలకం",
+"Multispectral imagery":"బహుళ-వర్ణపట చిత్రాలు","Crop vigour, canopy water content, early stress":"పంట బలం, ఆకుల్లో నీటి శాతం, తొలి దశ ఒత్తిడి",
+"Rainfall and cloud motion":"వర్షం మరియు మేఘ కదలిక","Nowcasts and the long baseline for anomalies":"తక్షణ అంచనాలు, అసాధారణతలను గుర్తించేందుకు దీర్ఘకాలిక ఆధారం",
+"Reanalysis climate data":"వాతావరణ పునర్విశ్లేషణ డేటా","Temperature, humidity and wind history for seasonal patterns":"కాలానుగుణ నమూనాల కోసం ఉష్ణోగ్రత, తేమ, గాలి చరిత్ర",
+"Soil sensor feeds":"నేల సెన్సర్ డేటా","Ground-truth moisture and temperature at root depth":"వేరు లోతులో నిజమైన తేమ, ఉష్ణోగ్రత",
+"About this demo.":"ఈ డెమో గురించి.",
+"The scores above come from a transparent rule-based model so you can see how each input moves the risk. They are illustrative, not a validated forecast. A production deployment would replace the rules with models trained and calibrated on real Sentinel, ISRO, IMD and sensor data for each district.":"పై స్కోర్లు సరళమైన నియమాల ఆధారిత మోడల్ నుండి వస్తాయి; ప్రతి ఇన్‌పుట్ ముప్పును ఎలా మారుస్తుందో చూడటానికి ఇది ఉపయోగపడుతుంది. ఇవి ఉదాహరణలు మాత్రమే, ధృవీకరించిన అంచనా కాదు. అసలు వ్యవస్థలో ప్రతి జిల్లాకు సెంటినెల్, ఇస్రో, IMD, సెన్సర్ డేటాపై శిక్షణ పొందిన మోడళ్లు ఈ నియమాల స్థానంలో వస్తాయి.",
+"Varsha. Built for farmers, cooperatives and agri-insurers who need to act before the weather does.":"వర్ష. వాతావరణం కంటే ముందే చర్య తీసుకోవాల్సిన రైతులు, సహకార సంఘాలు, వ్యవసాయ బీమా సంస్థల కోసం."
+};
+TITLE.ta='வர்ஷா — ஒவ்வொரு நிலத்துக்கும் நுண் காலநிலை அபாயம்';
+TITLE.te='వర్ష — ప్రతి పొలానికి సూక్ష్మ వాతావరణ ముప్పు';
+D.ta={g:['வறட்சி','அதிக மழை','நோய் அபாயம்'],lv:['குறைவு','மிதம்','அதிகம்'],days:'நாட்கள்',
+ crop:{rice:'நெல்',cotton:'பருத்தி',coffee:'காபி மற்றும் மிளகு',wheat:'கோதுமை',soy:'சோயாபீன்'},
+ today:'இன்று',range:(a,b)=>`முன்னறிவிப்புக் காலம்: ${a} முதல் ${b} வரை`,
+ calm:(c,l)=>`${c} பயிருக்கு நிலைமை சீராக உள்ளது. மகசூல் அபாயம்: சுமார் ${l}%.`,
+ main:(c,t,l)=>`${c} பயிருக்கு முக்கிய அச்சுறுத்தல்: ${t}. நடவடிக்கை எடுக்காவிட்டால் மகசூல் அபாயம்: சுமார் ${l}%.`,
+ w:{now:'இந்த வாரம்',w2:'அடுத்த 2 வாரங்கள்',d10:'10 நாட்களுக்குள்',sow:'விதைப்பதற்கு முன்',rain:'கனமழைக்கு முன்',hold:'முன்னறிவிப்பு சரியானால்',weekly:'வாரந்தோறும்',noon:'நண்பகல்',on:'தொடர்ந்து'},
+ irr:(s,n)=>['பாதுகாப்பு நீர்ப்பாசனத்தைத் திட்டமிடுங்கள்',`மண் ஈரப்பதம் ${s.soil}%; அடுத்த 8 வாரங்களில் ${n} வாரங்கள் மழை பயிரின் தேவையை விடப் பெருமளவு குறைவாக இருக்கும். முக்கிய வளர்ச்சிக் கட்டங்களில் நீர் பாய்ச்சுங்கள், பூக்கும் காலத்துக்கு நீரைச் சேமித்து வையுங்கள்.`],
+ cons:(r)=>['மண்ணின் நீரைச் சேமியுங்கள்',r?'மாறி மாறி நீர் தேக்குதல், உலரவிடுதல் முறையைப் பின்பற்றுங்கள்; வரப்புகளில் நீரைத் தேக்குங்கள்.':'தழைக்கூளம் இடுங்கள், உழவைக் குறையுங்கள்; ஆவியாதல் குறையும்.'],
+ seed:['குறுகிய கால ரகங்களுக்கு மாறுங்கள் அல்லது விதைப்பைத் தள்ளிப்போடுங்கள்','நீண்ட வறட்சியில் விதைத்தால் முளைப்பு பாதிக்கப்படும். மாற்று விதைகளுக்கு வேளாண் அலுவலகத்தை அணுகுங்கள்.'],
+ onset:['தொடர் மழைக்காகக் காத்திருங்கள்','பருவமழை தாமதமாகிறது. முதல் தூறலுக்கு அல்ல, நன்றாக நனைக்கும் மழைக்குப் பிறகே விதையுங்கள்.'],
+ drain:(s)=>['வடிகால்களைச் சுத்தம் செய்யுங்கள்',`மழை சராசரியை விட ${s.rain>0?'+':''}${s.rain}% உள்ளது. வயல் வடிகால்களைத் திறந்து, இடுபொருட்களையும் அறுவடைப் பொருட்களையும் தாழ்வான இடத்திலிருந்து அகற்றுங்கள்.`],
+ fert:['உரமிடுவதை நிறுத்தி வையுங்கள்','நைட்ரஜனைப் பல தவணைகளில், மழையில்லாத நேரத்தில் மட்டும் இடுங்கள்; அடித்துச் செல்லப்படுவதைத் தவிர்க்கலாம்.'],
+ harv:['முதிர்ந்த பயிரை முன்கூட்டியே அறுவடை செய்யுங்கள்','தேங்கிய நீரும் நனைந்த காய்களும் தரத்தை விரைவில் குறைக்கும்.'],
+ scout:(c)=>['பூஞ்சை நோயைக் கண்காணியுங்கள்',c?'இலைத் துரு, காய் நோய் குறித்துக் கவனியுங்கள். மழை இடைவெளியில் தடுப்பு காப்பர் தெளிப்பைத் திட்டமிடுங்கள்.':'கீழ் இலைகளைப் பாருங்கள்; புள்ளிகள் தெரிந்தால் மழையில்லாத நேரத்தில் தடுப்பு மருந்து தெளியுங்கள்.'],
+ heat:['வெப்ப அழுத்தத்தைக் குறையுங்கள்','அதிகாலை அல்லது மாலையில் நீர் பாய்ச்சுங்கள், கடும் வெயிலில் தெளிக்காதீர்கள்.'],
+ none:['வழக்கமான முறையைத் தொடருங்கள்','எந்த அபாயமும் நடவடிக்கை தேவைப்படும் அளவை எட்டவில்லை. புதிய செயற்கைக்கோள் படங்களையும் உணரி தரவுகளையும் வர்ஷா தொடர்ந்து கண்காணிக்கும்.']};
+D.te={g:['కరువు','అధిక వర్షం','వ్యాధి ముప్పు'],lv:['తక్కువ','మధ్యస్థం','ఎక్కువ'],days:'రోజులు',
+ crop:{rice:'వరి',cotton:'పత్తి',coffee:'కాఫీ మరియు మిరియాలు',wheat:'గోధుమ',soy:'సోయాబీన్'},
+ today:'నేడు',range:(a,b)=>`అంచనా కాలం: ${a} నుండి ${b} వరకు`,
+ calm:(c,l)=>`${c} పంటకు పరిస్థితి స్థిరంగా ఉంది. దిగుబడి ముప్పు: సుమారు ${l}%.`,
+ main:(c,t,l)=>`${c} పంటకు ప్రధాన ముప్పు: ${t}. చర్య తీసుకోకపోతే దిగుబడి ముప్పు: సుమారు ${l}%.`,
+ w:{now:'ఈ వారం',w2:'రాబోయే 2 వారాలు',d10:'10 రోజుల్లో',sow:'విత్తే ముందు',rain:'భారీ వర్షానికి ముందు',hold:'అంచనా నిజమైతే',weekly:'ప్రతి వారం',noon:'మధ్యాహ్నం',on:'నిరంతరం'},
+ irr:(s,n)=>['రక్షణ నీటిపారుదలను ప్లాన్ చేయండి',`నేల తేమ ${s.soil}% ఉంది; రాబోయే 8 వారాల్లో ${n} వారాలు వర్షం పంట అవసరం కన్నా చాలా తక్కువగా ఉంటుంది. కీలక ఎదుగుదల దశల్లో నీరు పెట్టండి, పూత సమయానికి నీటిని ఆదా చేయండి.`],
+ cons:(r)=>['నేల నీటిని ఆదా చేయండి',r?'తడి-ఆరబెట్టే పద్ధతిని పాటించండి, గట్లపై నీరు నిలపండి.':'మల్చింగ్ చేయండి, దుక్కి తగ్గించండి; ఆవిరి తగ్గుతుంది.'],
+ seed:['తక్కువ కాల వంగడాలకు మారండి లేదా విత్తనం వాయిదా వేయండి','సుదీర్ఘ కరువులో విత్తితే మొలక తక్కువ అవుతుంది. ప్రత్యామ్నాయ విత్తనాల కోసం వ్యవసాయ కార్యాలయాన్ని సంప్రదించండి.'],
+ onset:['నిరంతర వర్షం కోసం ఆగండి','రుతుపవనాలు ఆలస్యమవుతున్నాయి. మొదటి చినుకులకు కాదు, భూమి బాగా తడిసే వర్షం తర్వాతే విత్తండి.'],
+ drain:(s)=>['కాలువలను శుభ్రం చేయండి',`వర్షం సాధారణం కంటే ${s.rain>0?'+':''}${s.rain}% ఉంది. పొలం కాలువలు తెరిచి, ఎరువులు, కోసిన పంటను లోతట్టు ప్రాంతం నుండి తరలించండి.`],
+ fert:['ఎరువు వేయడం ఆపండి','నత్రజనిని విడతలుగా, వర్షం లేని సమయంలో మాత్రమే వేయండి; కొట్టుకుపోకుండా ఉంటుంది.'],
+ harv:['పక్వానికి వచ్చిన పంటను ముందే కోయండి','నిలిచిన నీరు, తడిసిన కాయలు నాణ్యతను త్వరగా తగ్గిస్తాయి.'],
+ scout:(c)=>['శిలీంధ్ర వ్యాధి కోసం పరిశీలించండి',c?'ఆకు తుప్పు, కాయ వ్యాధి గమనించండి. వర్షాల మధ్య నివారణగా కాపర్ పిచికారీ ప్లాన్ చేయండి.':'కింది ఆకులు చూడండి; మచ్చలు కనిపిస్తే వర్షం లేని సమయంలో నివారణ మందు పిచికారీ చేయండి.'],
+ heat:['వేడి ఒత్తిడిని తగ్గించండి','తెల్లవారుజామున లేదా సాయంత్రం నీరు పెట్టండి, తీవ్రమైన ఎండలో పిచికారీ చేయవద్దు.'],
+ none:['సాధారణ పద్ధతిని కొనసాగించండి','ఏ ముప్పూ చర్య అవసరమైన స్థాయికి చేరలేదు. కొత్త ఉపగ్రహ చిత్రాలు, సెన్సర్ రీడింగులను వర్ష గమనిస్తూనే ఉంటుంది.']};
+
+S.mr={
+"Try the engine":"इंजिन वापरून पहा",
+"Know what the next 8 weeks will do to your plot.":"पुढील 8 आठवड्यांत तुमच्या शेताचे काय होईल ते जाणून घ्या.",
+"Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.":"वर्षा उपग्रह छायाचित्रे, शेतातील माती सेन्सर आणि अनेक दशकांच्या मान्सून नोंदी एकत्र करून प्रत्येक शेतातील दुष्काळ, अवकाळी पाऊस आणि रोगाचा धोका यांचा अंदाज देते, आणि मग काय करायचे ते सांगते.",
+"Run a plot forecast":"शेताचा अंदाज पहा",
+"Forecast a plot":"शेताचा अंदाज",
+"Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.":"प्रदेश आणि पीक निवडा, किंवा इनपुट स्वतः बदला. धोका गुण आणि कृती योजना लगेच बदलतात.",
+"Region preset":"प्रदेश",
+"Palakkad, Kerala":"पालक्काड, केरळ","Marathwada, Maharashtra":"मराठवाडा, महाराष्ट्र","Ludhiana, Punjab":"लुधियाना, पंजाब","Wayanad, Kerala":"वायनाड, केरळ","Anantapur, Andhra Pradesh":"अनंतपूर, आंध्र प्रदेश",
+"Crop":"पीक","Paddy":"भात","Cotton":"कापूस","Coffee and pepper":"कॉफी आणि मिरी","Wheat":"गहू","Soybean":"सोयाबीन",
+"Soil moisture, top 30 cm":"मातीतील ओलावा, वरचे 30 सेमी",
+"Rainfall vs. 30-year normal":"पाऊस (30 वर्षांच्या सरासरीच्या तुलनेत)",
+"Vegetation trend (NDVI, 3 weeks)":"वनस्पती कल (NDVI, 3 आठवडे)",
+"Monsoon onset delay":"मान्सून सुरू होण्यास विलंब",
+"Temperature anomaly":"तापमानातील फरक",
+"Forecast rainfall":"अंदाजित पाऊस","Crop water need":"पिकाला लागणारे पाणी",
+"Mitigation plan":"धोका कमी करण्याची योजना",
+"How a forecast is made":"अंदाज कसा तयार होतो",
+"Four stages run on every plot, refreshed as new passes and sensor readings arrive.":"प्रत्येक शेतावर चार टप्पे चालतात, आणि नवीन उपग्रह छायाचित्रे व सेन्सर नोंदी आल्यावर ते अद्ययावत होतात.",
+"Observe":"निरीक्षण","Ground-truth":"जमिनीवरील पडताळणी","Forecast":"अंदाज","Advise":"सल्ला",
+"Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.":"कोपर्निकसचे सेंटिनल-1 रडार, सेंटिनल-2 छायाचित्रे, तसेच इस्रो आणि इन्सॅट उत्पादने ढगांच्या पलीकडेही मातीतील ओलावा, पिकाची ताकद आणि पावसाचा अंदाज देतात.",
+"Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.":"कमी वीज वापरणारे माती सेन्सर ओलावा, तापमान आणि क्षारता सांगतात. उपग्रह संकेत शेताच्या पातळीवर अचूक करण्यास ते मदत करतात.",
+"A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.":"जुन्या मान्सून नोंदी आणि हवामान डेटावर प्रशिक्षित मॉडेल प्रत्येक शेतासाठी साप्ताहिक पाऊस आणि ताण यांचा अंदाज अनिश्चिततेच्या मर्यादेसह देते.",
+"Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.":"धोके तारखेसह कृतींमध्ये बदलतात: कधी पाणी द्यायचे, पेरणी पुढे ढकलायची, पाणी काढायचे, फवारणी करायची किंवा लवकर काढणी करायची, पीक आणि वाढीच्या टप्प्यानुसार.",
+"What goes in, what comes out":"काय आत जाते, काय बाहेर येते",
+"Every output traces back to a source you can inspect.":"प्रत्येक निकालाचा स्रोत तुम्ही स्वतः तपासू शकता.",
+"Input":"इनपुट","Source":"स्रोत","What it tells us":"हे काय सांगते",
+"Radar backscatter":"रडार संकेत","Surface soil moisture through cloud, vital in monsoon months":"ढगांच्या पलीकडेही मातीच्या वरच्या थरातील ओलावा, मान्सूनच्या महिन्यांत अत्यंत महत्त्वाचा",
+"Multispectral imagery":"बहु-वर्णपटीय छायाचित्रे","Crop vigour, canopy water content, early stress":"पिकाची ताकद, पानांतील पाण्याचे प्रमाण, सुरुवातीचा ताण",
+"Rainfall and cloud motion":"पाऊस आणि ढगांची हालचाल","Nowcasts and the long baseline for anomalies":"तात्काळ अंदाज आणि असामान्यता ओळखण्यासाठी दीर्घकालीन आधार",
+"Reanalysis climate data":"हवामान पुनर्विश्लेषण डेटा","Temperature, humidity and wind history for seasonal patterns":"हंगामी पद्धतींसाठी तापमान, आर्द्रता आणि वाऱ्याचा इतिहास",
+"Soil sensor feeds":"माती सेन्सर डेटा","Ground-truth moisture and temperature at root depth":"मुळांच्या खोलीवरील खरा ओलावा आणि तापमान",
+"About this demo.":"या डेमोबद्दल.",
+"The scores above come from a transparent rule-based model so you can see how each input moves the risk. They are illustrative, not a validated forecast. A production deployment would replace the rules with models trained and calibrated on real Sentinel, ISRO, IMD and sensor data for each district.":"वरील गुण साध्या नियमांवर आधारित मॉडेलमधून येतात, जेणेकरून प्रत्येक इनपुट धोका कसा बदलतो हे दिसेल. हे केवळ उदाहरणे आहेत, पडताळलेला अंदाज नाही. प्रत्यक्ष प्रणालीत प्रत्येक जिल्ह्याच्या सेंटिनल, इस्रो, IMD आणि सेन्सर डेटावर प्रशिक्षित मॉडेल या नियमांची जागा घेतील.",
+"Varsha. Built for farmers, cooperatives and agri-insurers who need to act before the weather does.":"वर्षा. हवामानाआधी कृती करावी लागणाऱ्या शेतकरी, सहकारी संस्था आणि कृषी विमा कंपन्यांसाठी."
+};
+TITLE.mr='वर्षा — प्रत्येक शेतासाठी सूक्ष्म-हवामान धोका';
+D.mr={g:['दुष्काळ','जास्त पाऊस','रोगाचा धोका'],lv:['कमी','मध्यम','जास्त'],days:'दिवस',
+ crop:{rice:'भात',cotton:'कापूस',coffee:'कॉफी आणि मिरी',wheat:'गहू',soy:'सोयाबीन'},
+ today:'आज',range:(a,b)=>`अंदाज कालावधी: ${a} ते ${b}`,
+ calm:(c,l)=>`${c} साठी परिस्थिती स्थिर दिसते. उत्पादनाला धोका: सुमारे ${l}%.`,
+ main:(c,t,l)=>`${c} साठी मुख्य धोका: ${t}. काही न केल्यास उत्पादनाला धोका: सुमारे ${l}%.`,
+ w:{now:'या आठवड्यात',w2:'पुढील 2 आठवडे',d10:'10 दिवसांत',sow:'पेरणीपूर्वी',rain:'जोरदार पावसापूर्वी',hold:'अंदाज खरा ठरल्यास',weekly:'दर आठवड्याला',noon:'दुपारी',on:'सतत'},
+ irr:(s,n)=>['संरक्षक सिंचनाचे नियोजन करा',`मातीतील ओलावा ${s.soil}% आहे आणि पुढील 8 पैकी ${n} आठवड्यांत पाऊस पिकाच्या गरजेपेक्षा खूपच कमी असेल. महत्त्वाच्या वाढीच्या टप्प्यांत पाणी द्या आणि फुलोऱ्यासाठी पाणी राखून ठेवा.`],
+ cons:(r)=>['मातीतील पाणी जपा',r?'आलटून पालटून ओलावा आणि कोरडेपणा ही पद्धत वापरा आणि बांधांत पाणी अडवा.':'आच्छादन टाका आणि मशागत कमी करा, म्हणजे बाष्पीभवन घटेल.'],
+ seed:['कमी कालावधीच्या वाणांकडे वळा किंवा पेरणी पुढे ढकला','दीर्घ कोरड्या काळात पेरणी केल्यास उगवण कमकुवत होऊ शकते. पर्यायी बियाण्यासाठी कृषी कार्यालयाशी संपर्क साधा.'],
+ onset:['सलग पावसाची वाट पाहा','मान्सून उशिरा येत आहे. पहिल्या सरींवर नव्हे, तर जमीन भिजवणाऱ्या पावसानंतरच पेरणी करा.'],
+ drain:(s)=>['निचऱ्याचे चर साफ करा',`पाऊस सरासरीपेक्षा ${s.rain>0?'+':''}${s.rain}% आहे. शेतातील चर मोकळे करा आणि खते-बियाणे व काढलेला माल खालच्या भागातून हलवा.`],
+ fert:['खत देणे थांबवा','नायट्रोजन अनेक हप्त्यांत आणि फक्त कोरड्या वेळी द्या, म्हणजे वाहून जाणार नाही.'],
+ harv:['तयार पीक लवकर काढा','साचलेले पाणी आणि ओल्या शेंगा किंवा बोंडांची गुणवत्ता लवकर घटते.'],
+ scout:(c)=>['बुरशीजन्य रोगाची तपासणी करा',c?'पानावरील तांबेरा आणि फळांचे रोग यावर लक्ष ठेवा. पावसाच्या मधल्या काळात प्रतिबंधक तांब्याची फवारणी करा.':'खालची पाने पाहा; डाग दिसल्यास कोरड्या वेळी प्रतिबंधक फवारणी करा.'],
+ heat:['उष्णतेचा ताण कमी करा','पहाटे किंवा संध्याकाळी पाणी द्या आणि तीव्र उन्हात फवारणी टाळा.'],
+ none:['नेहमीची पद्धत सुरू ठेवा','कोणताही धोका कृती आवश्यक पातळीवर पोहोचलेला नाही. वर्षा नवीन उपग्रह छायाचित्रे आणि सेन्सर नोंदींवर लक्ष ठेवत राहील.']};
+
+S.hi["More inputs (optional)"]="और इनपुट (वैकल्पिक)";
+S.ml["More inputs (optional)"]="കൂടുതൽ ഇൻപുട്ടുകൾ (ഓപ്ഷണൽ)";
+S.ta["More inputs (optional)"]="மேலும் உள்ளீடுகள் (விருப்பம்)";
+S.te["More inputs (optional)"]="మరిన్ని ఇన్‌పుట్‌లు (ఐచ్ఛికం)";
+S.mr["More inputs (optional)"]="आणखी इनपुट (पर्यायी)";
+D.en.fx={go:'Contacting Copernicus, ISRO and IMD…',done:t=>`Demo data loaded at ${t}. In the live system these values come automatically from the sources shown under each input.`};
+D.hi.fx={go:'कोपरनिकस, इसरो और IMD से संपर्क हो रहा है…',done:t=>`डेमो डेटा ${t} पर लोड हुआ। असली प्रणाली में ये मान हर इनपुट के नीचे दिखाए स्रोतों से अपने आप आते हैं।`};
+D.ml.fx={go:'കോപ്പർനിക്കസ്, ഐഎസ്ആർഒ, IMD എന്നിവയിൽ നിന്ന് ശേഖരിക്കുന്നു…',done:t=>`ഡെമോ ഡാറ്റ ${t}-ന് ലോഡ് ചെയ്തു. യഥാർത്ഥ സംവിധാനത്തിൽ ഈ മൂല്യങ്ങൾ ഓരോ ഇൻപുട്ടിനു താഴെ കാണിച്ച ഉറവിടങ്ങളിൽ നിന്ന് സ്വയം വരും.`};
+D.ta.fx={go:'கோப்பர்நிகஸ், இஸ்ரோ, IMD-யிடமிருந்து பெறப்படுகிறது…',done:t=>`டெமோ தரவு ${t} மணிக்கு ஏற்றப்பட்டது. உண்மையான அமைப்பில் இந்த மதிப்புகள் ஒவ்வொரு உள்ளீட்டின் கீழும் காட்டப்படும் மூலங்களிலிருந்து தானாக வரும்.`};
+D.te.fx={go:'కోపర్నికస్, ఇస్రో, IMD నుండి తెస్తున్నాం…',done:t=>`డెమో డేటా ${t}కి లోడ్ అయింది. అసలు వ్యవస్థలో ఈ విలువలు ప్రతి ఇన్‌పుట్ కింద చూపిన మూలాల నుండి ఆటోమేటిక్‌గా వస్తాయి.`};
+D.mr.fx={go:'कोपर्निकस, इस्रो आणि IMD कडून डेटा आणत आहे…',done:t=>`डेमो डेटा ${t} वाजता लोड झाला. प्रत्यक्ष प्रणालीत ही मूल्ये प्रत्येक इनपुटखाली दाखवलेल्या स्रोतांकडून आपोआप येतात.`};
+D.en.fx.r="real IMD 2026 figure";D.en.fx.s="sample estimate";
+D.hi.fx.r="असली IMD 2026 आँकड़ा";D.hi.fx.s="नमूना अनुमान";
+D.ml.fx.r="യഥാർത്ഥ IMD 2026 കണക്ക്";D.ml.fx.s="സാമ്പിൾ കണക്ക്";
+D.ta.fx.r="உண்மையான IMD 2026 புள்ளிவிவரம்";D.ta.fx.s="மாதிரி மதிப்பீடு";
+D.te.fx.r="నిజమైన IMD 2026 గణాంకం";D.te.fx.s="నమూనా అంచనా";
+D.mr.fx.r="खरा IMD 2026 आकडा";D.mr.fx.s="नमुना अंदाज";
+S.hi["Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates."]="जहाँ मिले वहाँ IMD के 2026 मानसून के असली आँकड़े इस्तेमाल हुए हैं: मानसून आने में देरी (केरल, महाराष्ट्र, मध्य प्रदेश) और सितंबर की शुरुआत तक की मौसमी बारिश (तटीय आंध्र, रायलसीमा, बिहार)। मिट्टी की नमी, वनस्पति और तापमान अभी नमूना अनुमान हैं।";
+S.ml["Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates."]="ലഭ്യമായിടത്ത് IMD-യുടെ 2026 മൺസൂണിന്റെ യഥാർത്ഥ കണക്കുകൾ ഉപയോഗിച്ചിരിക്കുന്നു: മൺസൂൺ എത്തുന്നതിലെ കാലതാമസം (കേരളം, മഹാരാഷ്ട്ര, മധ്യപ്രദേശ്), സെപ്റ്റംബർ ആദ്യം വരെയുള്ള സീസൺ മഴ (തീരദേശ ആന്ധ്ര, രായലസീമ, ബിഹാർ). മണ്ണിലെ ഈർപ്പം, സസ്യവളർച്ച, താപനില എന്നിവ ഇപ്പോഴും സാമ്പിൾ കണക്കുകളാണ്.";
+S.ta["Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates."]="கிடைத்த இடங்களில் IMD-யின் 2026 பருவமழையின் உண்மையான புள்ளிவிவரங்கள் பயன்படுத்தப்பட்டுள்ளன: பருவமழை தொடக்க தாமதம் (கேரளா, மகாராஷ்டிரா, மத்தியப் பிரதேசம்), செப்டம்பர் தொடக்கம் வரையிலான பருவ மழையளவு (கடலோர ஆந்திரா, ராயலசீமா, பிஹார்). மண் ஈரப்பதம், தாவரம், வெப்பநிலை ஆகியவை இன்னும் மாதிரி மதிப்பீடுகளே.";
+S.te["Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates."]="దొరికిన చోట IMD 2026 రుతుపవన నిజమైన గణాంకాలు వాడాం: రుతుపవనాల రాకలో ఆలస్యం (కేరళ, మహారాష్ట్ర, మధ్యప్రదేశ్), సెప్టెంబర్ ఆరంభం వరకు సీజన్ వర్షపాతం (కోస్తా ఆంధ్ర, రాయలసీమ, బిహార్). నేల తేమ, వృక్షసంపద, ఉష్ణోగ్రత ఇంకా నమూనా అంచనాలే.";
+S.mr["Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates."]="जिथे मिळाले तिथे IMD चे 2026 मान्सूनचे खरे आकडे वापरले आहेत: मान्सून येण्यास विलंब (केरळ, महाराष्ट्र, मध्य प्रदेश) आणि सप्टेंबरच्या सुरुवातीपर्यंतचा हंगामी पाऊस (किनारी आंध्र, रायलसीमा, बिहार). मातीतील ओलावा, वनस्पती आणि तापमान अजूनही नमुना अंदाज आहेत.";
+S.hi["Fetch satellite data"]="सैटेलाइट डेटा लाएँ";
+S.ml["Fetch satellite data"]="ഉപഗ്രഹ ഡാറ്റ എടുക്കൂ";
+S.ta["Fetch satellite data"]="செயற்கைக்கோள் தரவைப் பெறவும்";
+S.te["Fetch satellite data"]="ఉపగ్రహ డేటా తెచ్చుకోండి";
+S.mr["Fetch satellite data"]="उपग्रह डेटा मिळवा";
+S.hi["Alappuzha (Kuttanad), Kerala"]="अलप्पुझा (कुट्टनाड), केरल";
+S.hi["Thanjavur, Tamil Nadu"]="तंजावुर, तमिलनाडु";
+S.hi["Guntur, Andhra Pradesh"]="गुंटूर, आंध्र प्रदेश";
+S.hi["Warangal, Telangana"]="वारंगल, तेलंगाना";
+S.hi["Yavatmal, Maharashtra"]="यवतमाल, महाराष्ट्र";
+S.hi["Kodagu, Karnataka"]="कोडगु, कर्नाटक";
+S.hi["Indore, Madhya Pradesh"]="इंदौर, मध्य प्रदेश";
+S.hi["Patna, Bihar"]="पटना, बिहार";
+S.ml["Alappuzha (Kuttanad), Kerala"]="ആലപ്പുഴ (കുട്ടനാട്), കേരളം";
+S.ml["Thanjavur, Tamil Nadu"]="തഞ്ചാവൂർ, തമിഴ്‌നാട്";
+S.ml["Guntur, Andhra Pradesh"]="ഗുണ്ടൂർ, ആന്ധ്രാപ്രദേശ്";
+S.ml["Warangal, Telangana"]="വാറങ്കൽ, തെലങ്കാന";
+S.ml["Yavatmal, Maharashtra"]="യവത്മാൽ, മഹാരാഷ്ട്ര";
+S.ml["Kodagu, Karnataka"]="കൊടഗ്, കർണാടക";
+S.ml["Indore, Madhya Pradesh"]="ഇൻഡോർ, മധ്യപ്രദേശ്";
+S.ml["Patna, Bihar"]="പട്ന, ബിഹാർ";
+S.ta["Alappuzha (Kuttanad), Kerala"]="ஆலப்புழா (குட்டநாடு), கேரளா";
+S.ta["Thanjavur, Tamil Nadu"]="தஞ்சாவூர், தமிழ்நாடு";
+S.ta["Guntur, Andhra Pradesh"]="குண்டூர், ஆந்திரப் பிரதேசம்";
+S.ta["Warangal, Telangana"]="வாரங்கல், தெலங்கானா";
+S.ta["Yavatmal, Maharashtra"]="யவத்மால், மகாராஷ்டிரா";
+S.ta["Kodagu, Karnataka"]="குடகு, கர்நாடகா";
+S.ta["Indore, Madhya Pradesh"]="இந்தூர், மத்தியப் பிரதேசம்";
+S.ta["Patna, Bihar"]="பாட்னா, பிஹார்";
+S.te["Alappuzha (Kuttanad), Kerala"]="అలప్పుజ (కుట్టనాడు), కేరళ";
+S.te["Thanjavur, Tamil Nadu"]="తంజావూరు, తమిళనాడు";
+S.te["Guntur, Andhra Pradesh"]="గుంటూరు, ఆంధ్రప్రదేశ్";
+S.te["Warangal, Telangana"]="వరంగల్, తెలంగాణ";
+S.te["Yavatmal, Maharashtra"]="యవత్మాల్, మహారాష్ట్ర";
+S.te["Kodagu, Karnataka"]="కొడగు, కర్ణాటక";
+S.te["Indore, Madhya Pradesh"]="ఇండోర్, మధ్యప్రదేశ్";
+S.te["Patna, Bihar"]="పాట్నా, బిహార్";
+S.mr["Alappuzha (Kuttanad), Kerala"]="अलप्पुझा (कुट्टनाड), केरळ";
+S.mr["Thanjavur, Tamil Nadu"]="तंजावर, तमिळनाडू";
+S.mr["Guntur, Andhra Pradesh"]="गुंटूर, आंध्र प्रदेश";
+S.mr["Warangal, Telangana"]="वारंगल, तेलंगणा";
+S.mr["Yavatmal, Maharashtra"]="यवतमाळ, महाराष्ट्र";
+S.mr["Kodagu, Karnataka"]="कोडगू, कर्नाटक";
+S.mr["Indore, Madhya Pradesh"]="इंदूर, मध्य प्रदेश";
+S.mr["Patna, Bihar"]="पाटणा, बिहार";
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const fd=(d,o)=>{try{return new Intl.DateTimeFormat(LOC[lang],o).format(d)}catch(e){return d.toDateString()}};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+
+function applyStatic(){
+ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentNode.closest('script,svg,style,#gauges,#plan,#summary,#range,#today,#fetchStatus,#listen,#listenNote')?NodeFilter.FILTER_REJECT:NodeFilter.FILTER_ACCEPT});
+ const a=[];while(w.nextNode())a.push(w.currentNode);
+ a.forEach(n=>{if(n.__o===undefined)n.__o=n.nodeValue;const k=n.__o.trim();if(!k)return;const t=lang==='en'?null:S[lang][k];n.nodeValue=t?n.__o.replace(k,t):n.__o});
+ document.title=TITLE[lang];document.documentElement.lang=lang;
+ $('lang').setAttribute('aria-label',{en:'Language',hi:'भाषा',ml:'ഭാഷ',ta:'மொழி',te:'భాష',mr:'भाषा'}[lang]);
+}
+function setDates(){
+ $('today').textContent=dg(D[lang].today+': '+fd(TODAY,{weekday:'long',day:'numeric',month:'long',year:'numeric'}));
+ const o={day:'numeric',month:'short',year:'numeric'};
+ $('range').textContent=dg(D[lang].range(fd(TODAY,o),fd(addDays(TODAY,55),o)));
+}
+function level(v){return v>=65?[2,'var(--bad)']:v>=35?[1,'var(--warn)']:[0,'var(--ok)']}
+function read(){return{soil:+$('soil').value,rain:+$('rain').value,ndvi:+$('ndvi').value,onset:+$('onset').value,temp:+$('temp').value,crop:CROP[$('crop').value]}}
+function update(){
+ if(typeof speaking!=='undefined'&&speaking)stopSpeak();
+ const s=read(),T=D[lang];
+ const fmt={soil:v=>v+'%',rain:v=>(v>0?'+':'')+v+'%',ndvi:v=>(v>0?'+':'')+(+v).toFixed(2),onset:v=>v+' '+T.days,temp:v=>(v>0?'+':'')+(+v).toFixed(1)+' °C'};
+ for(const k of ['soil','rain','ndvi','onset','temp'])$(k+'V').textContent=dg(fmt[k](s[k]));
+ const dry=cl((30-s.soil)/30),def=cl(-s.rain/60),dly=cl(s.onset/21),heat=cl(s.temp/3),nd=cl(-s.ndvi/0.1);
+ const drought=Math.round(cl(100*(.3*dry+.3*def+.15*dly+.1*heat+.15*nd)*s.crop.d,0,100));
+ const flood=Math.round(cl(100*(.6*cl(s.rain/80)+.4*cl((s.soil-35)/20))*s.crop.f,0,100));
+ const fungal=Math.round(cl(100*(.5*cl((s.soil-28)/25)+.3*cl(s.rain/70)+.2*(1-cl(Math.abs(s.temp-1)/3)))*s.crop.u,0,100));
+ const loss=Math.round(cl(.35*drought+.3*flood+.15*fungal,0,60));
+ const vals=[drought,flood,fungal];
+ $('gauges').innerHTML=vals.map((v,i)=>{const [l,c]=level(v);return `<div class="g" style="--c:${c}"><small>${T.g[i]}</small><b>${dg(v)}</b><span class="tag">${T.lv[l]}</span></div>`}).join('');
+ chart(s);
+ const ti=vals.indexOf(Math.max(...vals)),cn=T.crop[$('crop').value];
+ $('summary').textContent=dg(vals[ti]<35?T.calm(cn,loss):T.main(cn,T.g[ti],loss));
+ plan(s,drought,flood,fungal);
+}
+function weeks(s){
+ const out=[];
+ for(let i=0;i<8;i++){
+  const wave=1+.35*Math.sin(i*1.1+1),onset=cl((i*7-s.onset+7)/14,.1,1);
+  out.push(Math.max(2,Math.round(50*(1+s.rain/100)*wave*onset)));
+ }return out;
+}
+function chart(s){
+ const r=weeks(s),need=s.crop.need,max=Math.max(100,...r,need)*1.1;
+ const W=640,H=260,L=40,B=30,T=14,bw=(W-L-10)/8;
+ let g='';
+ for(let t=0;t<=4;t++){const y=T+(H-T-B)*t/4;g+=`<line x1="${L}" x2="${W}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${L-6}" y="${y+4}" text-anchor="end" font-size="11" fill="var(--muted)">${dg(Math.round(max*(1-t/4)))}</text>`}
+ r.forEach((v,i)=>{const h=(H-T-B)*v/max,x=L+i*bw+bw*.18,lab=fd(addDays(TODAY,i*7),{day:'numeric',month:'short'});g+=`<rect x="${x}" y="${H-B-h}" width="${bw*.64}" height="${h}" rx="3" fill="var(--accent)"/><text x="${x+bw*.32}" y="${H-10}" text-anchor="middle" font-size="10" fill="var(--muted)">${lab}</text>`});
+ const ny=H-B-(H-T-B)*need/max;
+ g+=`<line x1="${L}" x2="${W}" y1="${ny}" y2="${ny}" stroke="var(--warn)" stroke-width="2.5" stroke-dasharray="6 4"/><text x="${L-6}" y="${T-2}" text-anchor="end" font-size="10" fill="var(--muted)">mm</text>`;
+ $('chart').innerHTML=g;
+}
+function plan(s,d,f,u){
+ const T=D[lang],W=T.w,n=weeks(s).filter(v=>v<s.crop.need*.6).length,list=[],c=$('crop').value;
+ const add=(w,x)=>list.push([w,x[0],x[1]]);
+ if(d>=35){add(W.now,T.irr(s,n));add(W.w2,T.cons(c==='rice'))}
+ if(d>=65)add(W.d10,T.seed);
+ if(s.onset>=10)add(W.sow,T.onset);
+ if(f>=35){add(W.rain,T.drain(s));add(W.w2,T.fert)}
+ if(f>=65&&(c==='wheat'||c==='cotton'||c==='soy'))add(W.hold,T.harv);
+ if(u>=35)add(W.weekly,T.scout(c==='coffee'));
+ if(s.temp>=2)add(W.noon,T.heat);
+ if(!list.length)add(W.on,T.none);
+ $('plan').innerHTML=dg(list.map(([w,t,x])=>`<li><span class="when">${w}</span><div><strong>${t}</strong>${x}</div></li>`).join(''));
+}
+function load(k){const p=PRESET[k];for(const f of ['soil','rain','ndvi','onset','temp'])$(f).value=p[f];$('crop').value=p.crop;update()}
+const REAL={guntur:['rain'],anantapur:['rain'],patna:['rain'],alappuzha:['onset'],wayanad:['onset'],palakkad:['onset'],marathwada:['onset'],yavatmal:['onset'],indore:['onset']};
+const SRC={soil:'Sentinel-1 + soil probe',rain:'IMD + INSAT',onset:'IMD + ERA5',ndvi:'Sentinel-2',temp:'ERA5'};
+let fetched=null;
+function setFetch(){const el=$('fetchStatus');if(!el)return;el.textContent=fetched?dg(D[lang].fx.done(fetched)):'';
+ document.querySelectorAll('.srcn').forEach(n=>n.remove());
+ if(!fetched)return;const R=REAL[$('region').value]||[];
+ for(const k in SRC){const n=document.createElement('small');n.className='srcn';n.textContent=SRC[k]+' · '+(R.includes(k)?D[lang].fx.r:D[lang].fx.s);$(k).after(n)}}
+$('fetch').addEventListener('click',()=>{
+ const b=$('fetch'),p=PRESET[$('region').value];
+ b.disabled=true;$('fetchStatus').textContent=D[lang].fx.go;
+ setTimeout(()=>{
+  const j=(v,a,lo,hi,st)=>{let x=v+(Math.random()*2-1)*a;x=Math.round(x/st)*st;return cl(x,lo,hi)};
+  const R=REAL[$('region').value]||[];const jr=(f,v,a,lo,hi,st)=>R.includes(f)?v:j(v,a,lo,hi,st);$('soil').value=j(p.soil,3,5,55,1);$('rain').value=jr('rain',p.rain,8,-80,120,5);
+  $('onset').value=jr('onset',p.onset,1,0,30,1);$('ndvi').value=j(p.ndvi,.02,-.2,.2,.01).toFixed(2);
+  $('temp').value=j(p.temp,.5,-2,4,.5);$('crop').value=p.crop;
+  fetched=fmtTime();update();setFetch();b.disabled=false;
+ },1200);
+});
+function fmtTime(){return fd(new Date(),{hour:'2-digit',minute:'2-digit'})}
+const LS={
+en:['🔊 Listen','⏹ Stop','No voice for this language was found on your device. Try Chrome, or add the language voice in your device settings.'],
+hi:['🔊 सुनें','⏹ रोकें','आपके डिवाइस पर इस भाषा की आवाज़ नहीं मिली। Chrome आज़माएँ या डिवाइस सेटिंग में इस भाषा की आवाज़ जोड़ें।'],
+ml:['🔊 കേൾക്കൂ','⏹ നിർത്തൂ','നിങ്ങളുടെ ഉപകരണത്തിൽ ഈ ഭാഷയുടെ ശബ്ദം കണ്ടെത്താനായില്ല. Chrome ഉപയോഗിച്ച് നോക്കുക, അല്ലെങ്കിൽ ഉപകരണ ക്രമീകരണത്തിൽ ഈ ഭാഷയുടെ ശബ്ദം ചേർക്കുക.'],
+ta:['🔊 கேளுங்கள்','⏹ நிறுத்து','உங்கள் சாதனத்தில் இந்த மொழிக்கான குரல் கிடைக்கவில்லை. Chrome-ஐ முயற்சிக்கவும் அல்லது சாதன அமைப்புகளில் இந்த மொழிக்கான குரலைச் சேர்க்கவும்.'],
+te:['🔊 వినండి','⏹ ఆపండి','మీ పరికరంలో ఈ భాషకు వాయిస్ దొరకలేదు. Chrome ప్రయత్నించండి లేదా పరికర సెట్టింగ్స్‌లో ఈ భాష వాయిస్ జోడించండి.'],
+mr:['🔊 ऐका','⏹ थांबवा','तुमच्या डिव्हाइसवर या भाषेचा आवाज सापडला नाही. Chrome वापरून पहा किंवा डिव्हाइस सेटिंगमध्ये या भाषेचा आवाज जोडा.']};
+const TTS={en:'en-IN',hi:'hi-IN',ml:'ml-IN',ta:'ta-IN',te:'te-IN',mr:'mr-IN'};
+const CAN='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
+let speaking=false,sid=0;
+if(CAN)speechSynthesis.getVoices();
+function setListen(){const b=$('listen');if(!b)return;b.textContent=speaking?LS[lang][1]:LS[lang][0];b.setAttribute('aria-pressed',speaking)}
+function loadVoices(){if(CAN)try{_voices=speechSynthesis.getVoices()||[]}catch(e){_voices=[]}}
+let _voices=[],_aud=null,_run=0;
+if(CAN){loadVoices();try{speechSynthesis.addEventListener('voiceschanged',loadVoices)}catch(e){speechSynthesis.onvoiceschanged=loadVoices}}
+function pickVoice(l){l=l||lang;loadVoices();const want=(TTS[l]||'en-IN').toLowerCase(),n=v=>v.lang.toLowerCase().replace('_','-'),m=_voices.filter(v=>n(v)===want||n(v).split('-')[0]===l);
+ return m.find(v=>n(v)===want&&/google|natural|online/i.test(v.name))||m.find(v=>n(v)===want)||m[0]}
+function ttsChunks(parts){const out=[];parts.forEach(p=>{const t=String(p).replace(/\s+/g,' ').trim();if(!t)return;
+ (t.match(/[^.!?।|]+[.!?।|]?\s*/g)||[t]).forEach(s=>{s=s.trim();while(s.length>170){let k=s.lastIndexOf(' ',170);if(k<60)k=170;out.push(s.slice(0,k));s=s.slice(k).trim()}if(s)out.push(s)})});
+ const m=[];out.forEach(s=>{if(m.length&&m[m.length-1].length+s.length<170)m[m.length-1]+=' '+s;else m.push(s)});return m}
+function ttsStop(){_run++;if(CAN){try{speechSynthesis.cancel()}catch(e){}}if(_aud){try{_aud.pause();_aud.removeAttribute('src');_aud.load()}catch(e){}_aud=null}}
+/* Speaks with an installed device voice when one exists; otherwise (common for Marathi, Telugu, Tamil, Kannada) streams the speech as audio. */
+function ttsPlay(parts,done,onFail,l){
+ l=l||lang;ttsStop();const run=_run,q=ttsChunks(parts);
+ const fin=()=>{if(run===_run&&done)done()},fail=()=>{if(run===_run){if(onFail)onFail();fin()}};
+ if(!q.length){fin();return}
+ const viaAudio=i=>{
+  if(run!==_run)return;if(i>=q.length){fin();return}
+  const a=new Audio();_aud=a;a.onended=()=>viaAudio(i+1);a.onerror=fail;
+  a.src='https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl='+encodeURIComponent(l)+'&q='+encodeURIComponent(q[i]);
+  const p=a.play();if(p&&p.catch)p.catch(fail)};
+ const v=CAN?pickVoice(l):null;
+ if(!v){viaAudio(0);return}
+ const viaVoice=i=>{
+  if(run!==_run)return;if(i>=q.length){fin();return}
+  const u=new SpeechSynthesisUtterance(q[i]);u.lang=TTS[l]||'en-IN';u.voice=v;u.rate=.9;
+  let started=false,dead=false;
+  u.onstart=()=>{started=true};
+  u.onend=()=>{if(!dead)viaVoice(i+1)};
+  u.onerror=e=>{if(dead||run!==_run)return;if(e&&(e.error==='interrupted'||e.error==='canceled'))return;dead=true;q.splice(0,i);viaAudio(0)};
+  if(i===0)setTimeout(()=>{if(!started&&!dead&&run===_run){dead=true;try{speechSynthesis.cancel()}catch(e){}viaAudio(0)}},3500);
+  speechSynthesis.speak(u)};
+ try{speechSynthesis.cancel()}catch(e){}
+ setTimeout(()=>viaVoice(0),80)}
+function stopSpeak(){sid++;ttsStop();speaking=false;setListen()}
+function speak(){
+ if(speaking){stopSpeak();return}
+ const parts=[$('summary').textContent];
+ document.querySelectorAll('#plan li').forEach(li=>{const d=li.querySelector('div');parts.push(li.querySelector('.when').textContent+'. '+d.querySelector('strong').textContent+'. '+d.lastChild.nodeValue)});
+ $('listenNote').textContent='';
+ const id=++sid;speaking=true;setListen();
+ ttsPlay(parts,()=>{if(id===sid){speaking=false;setListen()}},()=>{if(id===sid)$('listenNote').textContent=LS[lang][2]});
+}
+$('listen').addEventListener('click',speak);
+/* Marathi refinements: natural wording and Devanagari digits */
+Object.assign(S.mr,{
+"Try the engine":"इंजिन वापरून पाहा",
+"Know what the next 8 weeks will do to your plot.":"पुढील ८ आठवड्यांत तुमच्या शेताचे काय होईल ते जाणून घ्या.",
+"Varsha merges satellite imagery, in-field soil sensors and decades of monsoon records to forecast drought, unseasonal rain and disease pressure at the level of a single farm, then tells you what to do about it.":"वर्षा उपग्रह प्रतिमा, शेतातील माती सेन्सर आणि अनेक दशकांच्या मान्सून नोंदी एकत्र करून प्रत्येक शेतातील दुष्काळ, अवकाळी पाऊस आणि रोगाचा धोका यांचा अंदाज देते, आणि मग काय करायचे ते सांगते.",
+"Run a plot forecast":"शेताचा अंदाज पाहा",
+"Pick a region and crop, or adjust the live inputs yourself. The risk scores and the action plan update instantly.":"प्रदेश आणि पीक निवडा, किंवा आकडे स्वतः बदला. धोक्याचे गुण आणि कृती योजना लगेच बदलतात.",
+"Soil moisture, top 30 cm":"मातीतील ओलावा (वरचे ३० सेमी)",
+"Rainfall vs. 30-year normal":"पाऊस (३० वर्षांच्या सरासरीच्या तुलनेत)",
+"Vegetation trend (NDVI, 3 weeks)":"पिकाच्या हिरवाईचा कल (NDVI, ३ आठवडे)",
+"Monsoon onset delay":"मान्सून दाखल होण्यास विलंब",
+"Temperature anomaly":"सरासरीपेक्षा तापमानातील फरक",
+"Four stages run on every plot, refreshed as new passes and sensor readings arrive.":"प्रत्येक शेतासाठी चार टप्पे चालतात; नवीन उपग्रह प्रतिमा आणि सेन्सर नोंदी मिळताच ते अद्ययावत होतात.",
+"Sentinel-1 radar and Sentinel-2 optical passes from Copernicus, plus ISRO and INSAT products, give cloud-piercing soil wetness, vegetation vigour and rainfall estimates.":"कोपर्निकसचे सेंटिनल-१ रडार आणि सेंटिनल-२ प्रतिमा, तसेच इस्रो आणि इन्सॅटची उत्पादने ढगांच्या पलीकडेही मातीतील ओलावा, पिकाचे आरोग्य आणि पावसाचा अंदाज देतात.",
+"Low-power soil probes report moisture, temperature and salinity. They calibrate the satellite signal so it holds at field scale.":"कमी वीज वापरणारे माती सेन्सर ओलावा, तापमान आणि क्षारता सांगतात. यामुळे उपग्रहाचा अंदाज शेताच्या पातळीवर अचूक ठरतो.",
+"A model trained on historical monsoon records and reanalysis data predicts weekly rainfall and stress for each plot, with an uncertainty band.":"जुन्या मान्सून नोंदी आणि हवामान आकडेवारीवर प्रशिक्षित मॉडेल प्रत्येक शेतासाठी आठवड्याचा पाऊस आणि पिकावरील ताण यांचा अंदाज देते, अनिश्चिततेच्या मर्यादेसह.",
+"Risks become dated actions: when to irrigate, delay sowing, drain, spray or harvest early, written for the crop and growth stage.":"धोक्यांचे रूपांतर तारखेसह कृतींमध्ये होते: कधी पाणी द्यायचे, पेरणी पुढे ढकलायची, पाणी काढून टाकायचे, फवारणी करायची की लवकर काढणी करायची, हे पीक आणि वाढीच्या टप्प्यानुसार सांगितले जाते.",
+"What goes in, what comes out":"कोणती माहिती आत, कोणते निकाल बाहेर",
+"Input":"घटक",
+"Copernicus Sentinel-1":"कोपर्निकस सेंटिनल-१",
+"Copernicus Sentinel-2, ISRO Resourcesat":"कोपर्निकस सेंटिनल-२, इस्रो रिसोर्ससॅट",
+"INSAT series, IMD records":"इन्सॅट मालिका, IMD च्या नोंदी",
+"Copernicus ERA5":"कोपर्निकस ERA5",
+"Field probes over LoRaWAN or MQTT":"LoRaWAN किंवा MQTT द्वारे शेतातील सेन्सर",
+"The scores above come from a transparent rule-based model so you can see how each input moves the risk. They are illustrative, not a validated forecast. A production deployment would replace the rules with models trained and calibrated on real Sentinel, ISRO, IMD and sensor data for each district.":"वरील गुण साध्या नियमांवर आधारित मॉडेलमधून येतात, जेणेकरून प्रत्येक आकडा धोका कसा बदलतो हे दिसेल. हे केवळ उदाहरण आहे, पडताळलेला अंदाज नाही. प्रत्यक्ष प्रणालीत प्रत्येक जिल्ह्याच्या सेंटिनल, इस्रो, IMD आणि सेन्सर माहितीवर प्रशिक्षित मॉडेल या नियमांची जागा घेतील.",
+"Fetch satellite data":"उपग्रह माहिती मिळवा",
+"More inputs (optional)":"आणखी माहिती (पर्यायी)",
+"Real IMD 2026 monsoon figures are used where found: onset delay (Kerala, Maharashtra, Madhya Pradesh) and season rainfall to early September (Coastal Andhra, Rayalaseema, Bihar). Soil moisture, vegetation and temperature are still sample estimates.":"जिथे उपलब्ध होते तिथे IMD चे २०२६ मान्सूनचे खरे आकडे वापरले आहेत: मान्सून दाखल होण्यास विलंब (केरळ, महाराष्ट्र, मध्य प्रदेश) आणि सप्टेंबरच्या सुरुवातीपर्यंतचा हंगामी पाऊस (किनारी आंध्र, रायलसीमा, बिहार). मातीतील ओलावा, पिकाची हिरवाई आणि तापमान हे अजूनही नमुना अंदाज आहेत."
+});
+Object.assign(D.mr,{
+crop:{rice:'भातासाठी',cotton:'कापसासाठी',coffee:'कॉफी आणि मिरीसाठी',wheat:'गव्हासाठी',soy:'सोयाबीनसाठी'},
+calm:(c,l)=>`${c} परिस्थिती स्थिर दिसते. उत्पादनाला धोका: सुमारे ${l}%.`,
+main:(c,t,l)=>`${c} मुख्य धोका: ${t}. काही उपाय न केल्यास उत्पादनाला धोका: सुमारे ${l}%.`,
+w:{now:'या आठवड्यात',w2:'पुढील २ आठवडे',d10:'१० दिवसांत',sow:'पेरणीपूर्वी',rain:'जोरदार पावसापूर्वी',hold:'अंदाज खरा ठरल्यास',weekly:'दर आठवड्याला',noon:'दुपारी',on:'सातत्याने'},
+irr:(s,n)=>['संरक्षित सिंचनाचे नियोजन करा',`मातीतील ओलावा ${s.soil}% आहे आणि पुढील ८ पैकी ${n} आठवड्यांत पाऊस पिकाच्या गरजेपेक्षा खूपच कमी असेल. वाढीच्या महत्त्वाच्या टप्प्यांत पाणी द्या आणि फुलोऱ्यासाठी पाणी राखून ठेवा.`],
+cons:(r)=>['मातीतील पाणी जपा',r?'आलटून-पालटून पाणी देऊन शेत कोरडे ठेवण्याची पद्धत वापरा आणि बांधांमध्ये पाणी अडवा.':'आच्छादन टाका आणि मशागत कमी करा, म्हणजे बाष्पीभवन घटेल.'],
+drain:(s)=>['पाण्याच्या निचऱ्याचे चर साफ करा',`पावसाचे प्रमाण सरासरीच्या तुलनेत ${s.rain>0?'+':''}${s.rain}% आहे. शेतातील चर मोकळे करा आणि खते, बियाणे व काढलेला माल खालच्या भागातून हलवा.`],
+fert:['खत देणे थांबवा','नायट्रोजन अनेक हप्त्यांत आणि फक्त कोरड्या वेळी द्या, म्हणजे ते वाहून जाणार नाही.'],
+harv:['तयार पीक लवकर काढा','साचलेले पाणी आणि ओल्या शेंगा किंवा बोंडे यांची गुणवत्ता लवकर घटते.'],
+scout:(c)=>['बुरशीजन्य रोगाची तपासणी करा',c?'पानांवरील तांबेरा आणि फळांवरील रोग यांकडे लक्ष ठेवा. पावसाच्या मधल्या काळात प्रतिबंधक म्हणून तांब्याची फवारणी करा.':'खालची पाने पाहा; डाग दिसल्यास कोरड्या वेळी प्रतिबंधक फवारणी करा.']
+});
+D.mr.fx.r='खरा IMD २०२६ आकडा';
+LS.mr=['🔊 ऐका','⏹ थांबवा','तुमच्या डिव्हाइसवर या भाषेचा आवाज सापडला नाही. Chrome वापरून पाहा किंवा डिव्हाइस सेटिंगमध्ये या भाषेचा आवाज जोडा.'];
+function dg(s){return lang==='mr'?String(s).replace(/[0-9]/g,d=>'०१२३४५६७८९'[d]):s}
+function applyAll(){stopSpeak();applyStatic();setDates();update();setFetch();setListen();$('listenNote').textContent=''}
+$('region').addEventListener('change',e=>{fetched=null;load(e.target.value);setFetch()});
+for(const id of ['soil','rain','ndvi','onset','temp','crop'])$(id).addEventListener('input',update);
+$('lang').value=lang;
+$('lang').addEventListener('change',e=>{lang=e.target.value;try{localStorage.setItem('varsha-lang',lang)}catch(x){}applyAll()});
+document.querySelector('.rain').innerHTML=Array.from({length:28},(_,i)=>`<i style="height:${14+Math.round(32*Math.abs(Math.sin(i*.7)))}px;animation-delay:${i*40}ms"></i>`).join('');
+$('region').value='palakkad';
+load('palakkad');applyAll();
+</script>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id),cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const YLD={rice:4.2,cotton:2.0,coffee:1.0,wheat:4.6,soy:1.2},NM={rice:'Paddy',cotton:'Cotton',coffee:'Coffee and pepper',wheat:'Wheat',soy:'Soybean'};
+const lv=v=>v>=65?['High','var(--bad)']:v>=35?['Medium','var(--warn)']:['Low','var(--ok)'];
+const cls=v=>v>=40?['High','var(--bad)']:v>=20?['Medium','var(--warn)']:['Low','var(--ok)'];
+const RK=[['Climate','Drought','d',.8,5,85],['Climate','Flood','f',.8,5,80],['Climate','Heavy rainfall','f',.9,10,60],['Climate','Cyclone','f',.3,8,70],['Climate','Heatwave','h',.9,5,60],['Climate','Irregular monsoon','o',.8,10,65],
+['Production','Crop diseases','u',.9,8,70],['Production','Pest attacks','u',.6,20,60],['Production','Livestock diseases','u',.4,15,45],['Production','Poor seed quality','d',.3,15,50],['Production','Soil degradation','f',.3,25,55],
+['Financial','Higher input costs','m',0,45,55],['Financial','Loan repayment difficulty','L',1.2,15,75],['Financial','Price fluctuations','m',0,40,60],['Financial','Income loss','L',1.3,10,80],
+['Market','Lack of buyers','m',0,25,50],['Market','Transport problems','f',.4,20,45],['Market','Sudden demand change','m',0,30,45],
+['Operational','Machinery breakdown','f',.2,15,40],['Operational','Labour shortage','m',0,30,45],['Operational','Irrigation failure','d',.5,10,65],['Operational','Power interruption','h',.4,15,55],
+['Environmental','Soil erosion','f',.6,10,55],['Environmental','Water scarcity','d',.8,8,75],['Environmental','Pollution','m',0,15,30],['Environmental','Biodiversity loss','L',.3,15,35],
+['Health and safety','Accidents','f',.3,15,55],['Health and safety','Chemical exposure','u',.3,20,60],['Health and safety','Animal attacks','m',0,15,40],['Health and safety','Heat-related injuries','h',.3,12,45]];
+const MIT=[['Drought','Rainwater harvesting, drip irrigation and drought-resistant crops','d'],['Flood','Proper drainage, raised beds and flood-tolerant varieties','f'],['Pest and diseases','Integrated Pest Management (IPM) and regular monitoring','u'],['Soil degradation','Crop rotation, organic manure and cover cropping','f'],['Market price fluctuations','Crop diversification, storage and forward marketing','m'],['Livestock diseases','Vaccination, quarantine and veterinary check-ups','u'],['Labour shortages','Farm mechanisation and labour planning','m'],['Water scarcity','Farm ponds, mulching and efficient irrigation','d']];
+const PL=[['🌱 Resource management plan',['Efficient use of land, water and soil','Proper management of seeds, fertilisers and pesticides','Conservation of biodiversity','Sustainable livestock and waste management','Maintenance of farm equipment and irrigation facilities']],
+['💰 Financial risk management',['Crop and livestock insurance','Emergency funds and savings','Diversification of farm income','Budgeting and expenditure monitoring','Agricultural loans and government support schemes']],
+['🚨 Disaster preparedness',['Plans for floods, droughts, storms and other disasters','Keep emergency contact numbers','Arrange alternative water and electricity sources','Keep emergency supplies, medicines and equipment','Procedures to protect livestock, crops and workers']],
+['📡 Monitoring and early warning',['Check weather forecasts regularly','Pest and disease surveillance','Soil and water quality testing','Monitor crop and livestock health','Use weather-based agro-advisories and early warnings']],
+['🎓 Training and capacity building',['Train farmers and workers in risk management','Climate-smart agriculture awareness','Pesticide safety and machinery handling','Join farmer groups and cooperatives']],
+['👥 Implementation and responsibility',['Assign duties to owners, managers and workers','Set a timeline for each measure','Identify budget and resources','Coordinate with agricultural officers, veterinarians and extension agencies']]];
+const SRC='<a href="https://dataspace.copernicus.eu" target="_blank" rel="noopener">Copernicus Data Space</a> · <a href="https://cds.climate.copernicus.eu" target="_blank" rel="noopener">Copernicus ERA5</a> · <a href="https://bhuvan.nrsc.gov.in" target="_blank" rel="noopener">ISRO Bhuvan</a> · <a href="https://www.mosdac.gov.in" target="_blank" rel="noopener">ISRO MOSDAC (INSAT)</a> · <a href="https://mausam.imd.gov.in" target="_blank" rel="noopener">IMD</a>';
+function V(){const s=read(),w=weeks(s);const d=Math.round(cl((.3*cl((30-s.soil)/30)+.3*cl(-s.rain/60)+.15*cl(s.onset/21)+.1*cl(s.temp/3)+.15*cl(-s.ndvi/.1))*s.crop.d)*100),f=Math.round(cl((.6*cl(s.rain/80)+.4*cl((s.soil-35)/20))*s.crop.f)*100),u=Math.round(cl((.5*cl((s.soil-28)/25)+.3*cl(s.rain/70)+.2*(1-cl(Math.abs(s.temp-1)/3)))*s.crop.u)*100);
+const L=Math.round(cl(.35*d+.3*f+.15*u,0,60)),h=Math.round(cl((s.temp+.5)/3.5)*100),o=Math.round(cl(s.onset/21)*100);return{s,w,d,f,u,L,h,o,m:0,avg:w.reduce((a,b)=>a+b,0)/8}}
+function ax(){
+const v=V(),s=v.s,ck=$('crop').value,reg=$('region').selectedOptions[0].textContent,sz=+$('fsz').value||1;
+const yl=YLD[ck]*(1-v.L/100),ndl=s.ndvi<-.05?'declining: early crop stress':s.ndvi>.02?'rising: healthy canopy':'stable';
+const F=[['Satellite image analysis',(s.ndvi>0?'+':'')+s.ndvi.toFixed(2)+' NDVI','3-week vegetation trend is '+ndl,'Sentinel-2 · ISRO Resourcesat'],
+['Weather and monsoon forecast',(s.rain>0?'+':'')+s.rain+'% rain','Onset delay '+s.onset+' days; temperature '+(s.temp>0?'+':'')+s.temp+' °C vs normal','IMD · INSAT · ERA5'],
+['Soil intelligence',s.soil+'% moisture',s.soil<20?'Dry root zone':s.soil>40?'Near saturation':'Adequate moisture','Sentinel-1 radar · soil probes'],
+['Hyperlocal climate risk','D '+v.d+' · F '+v.f+' · P '+v.u,'Drought · flood · disease scores out of 100','Geospatial + time-series model'],
+['Agricultural yield prediction',yl.toFixed(1)+' t/ha','About '+v.L+'% below a normal '+YLD[ck]+' t/ha year','Yield-loss model']];
+$('axFeeds').innerHTML=F.map(x=>`<div class="ax-card"><small>${x[0]}</small><b>${x[1]}</b>${x[2]}<small style="margin-top:6px">${x[3]}</small></div>`).join('');
+const H=[7,15,30,60],fx=[.55,.7,.88,1],K=[['Drought',v.d,'var(--bad)'],['Excess rain',v.f,'var(--accent)'],['Heat stress',v.h,'var(--warn)'],['Disease',v.u,'#7A5AA8']];
+let g='';for(let t=0;t<=4;t++){const y=14+196*t/4;g+=`<line x1="40" x2="630" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="34" y="${y+4}" text-anchor="end" font-size="11" fill="var(--muted)">${100-t*25}</text>`}
+H.forEach((h,i)=>{g+=`<text x="${70+i*175}" y="236" text-anchor="middle" font-size="12" fill="var(--muted)">${h} days</text>`});
+K.forEach(k=>{const p=fx.map((f,i)=>[70+i*175,14+196*(1-cl(k[1]*f,0,100)/100)]);g+=`<polyline fill="none" stroke="${k[2]}" stroke-width="3" points="${p.map(a=>a.join(',')).join(' ')}"/>`+p.map(a=>`<circle cx="${a[0]}" cy="${a[1]}" r="4" fill="${k[2]}"/>`).join('')});
+$('axChart').innerHTML=g;$('axLeg').innerHTML=K.map(k=>`<span><i style="background:${k[2]}"></i>${k[0]} (now ${k[1]})</span>`).join('')+'<span>Projection scales today\'s scores over each horizon</span>';
+const cn=[];cn.push(v.d>=35?`<strong>Drought: likely (${v.d}/100).</strong> Soil moisture is ${s.soil}% and rain is ${s.rain}% against normal.`:`<strong>Drought: unlikely (${v.d}/100).</strong> Moisture and rainfall are not signalling shortage.`);
+cn.push(s.rain>=40||v.f>=35?`<strong>Excess rain: likely (+${Math.max(s.rain,0)}% vs normal).</strong>`:`<strong>Excess rain: not expected.</strong>`);cn.push(v.f>=65?'<strong>Flooding: high risk</strong> on low-lying plots; clear drains now.':v.f>=35?'<strong>Flooding: moderate risk</strong> during heavy spells.':'<strong>Flooding: low risk.</strong>');
+cn.push(v.h>=50?`<strong>Heat stress: likely</strong> at ${s.temp>0?'+':''}${s.temp} °C above normal.`:'<strong>Heat stress: not a main concern.</strong>');
+$('axConc').innerHTML='<h4 style="margin:0 0 4px;font-family:var(--head)">Conclusion for this land</h4>'+cn.map(x=>`<p>${x}</p>`).join('');
+const C=Object.keys(CROP).map(k=>[k,Math.round(cl((100-Math.abs(v.avg-CROP[k].need)*1.6-.25*v.d*CROP[k].d-.25*v.f*CROP[k].f)/100)*100)]).sort((a,b)=>b[1]-a[1]);
+$('axYield').innerHTML=`<div class="ax-card"><small>Expected yield, ${NM[ck]}</small><b>${yl.toFixed(1)} t/ha</b>${(yl*sz).toFixed(1)} t from ${sz} ha</div>`+C.slice(0,3).map((c,i)=>`<div class="ax-card"><small>${i?'Also suited':'Best suited this season'}</small><b>${NM[c[0]]}</b>Fit score ${c[1]}/100</div>`).join('');
+const R=RK.map(r=>{const l=Math.round(cl(r[4]+r[3]*v[r[2]],0,100)),p=l*r[5]/100;return{c:r[0],n:r[1],l,i:r[5],p}}),T=[...R].sort((a,b)=>b.p-a.p);
+$('axCrit').innerHTML=T.slice(0,4).map((r,i)=>`<div style="--c:${cls(r.p)[1]}"><small>Critical #${i+1}</small><br><strong>${r.n}</strong><br>${r.l}% likely, impact ${r.i}/100</div>`).join('');
+$('axReg').innerHTML=R.map(r=>{const k=cls(r.p);return`<tr><td>${r.c}</td><td>${r.n}</td><td>${r.l}% (${lv(r.l)[0]})</td><td>${r.i}/100</td><td><span class="bdg" style="--c:${k[1]}">${k[0]}</span></td></tr>`}).join('');
+$('axMit').innerHTML=MIT.map(m=>{const x=v[m[2]],t=m[2]==='m'?['Prepare','var(--warn)']:x>=65?['Priority','var(--bad)']:x>=35?['Prepare','var(--warn)']:['Standby','var(--ok)'];return`<tr><td><strong>${m[0]}</strong></td><td>${m[1]}</td><td><span class="bdg" style="--c:${t[1]}">${t[0]}</span></td></tr>`}).join('');
+$('axPlans').innerHTML=PL.map(p=>`<div class="ax-card"><h4>${p[0]}</h4><ul>${p[1].map(i=>`<li>${i}</li>`).join('')}</ul></div>`).join('');
+const top=T.slice(0,3).map(r=>r.n).join(', '),pr=MIT.filter(m=>m[2]!=='m'&&v[m[2]]>=35).map(m=>m[0]).join(', ')||'routine monitoring';
+const P=[['Farm profile',`${reg}; ${sz} ha of ${NM[ck].toLowerCase()}; livestock: enter your own`],['Risk identification',`Top risks: ${top}. Full list of ${R.length} in the register above`],['Risk assessment',T.slice(0,3).map(r=>`${r.n}: ${r.l}% likely, impact ${r.i}/100`).join('; ')],['Mitigation strategy',`Act first on: ${pr}. Corrective: replant or re-sow if stand is lost`],['Resources required',`Labour for drains and scouting; budget for ${v.d>=35?'drip or protective irrigation, ':''}${v.u>=35?'fungicide, ':''}insurance premium; weather and soil sensors`],['Responsibility','Owner: budget, insurance, loans. Manager: irrigation, drainage, scouting. Workers: field tasks, safety. Agricultural officer: advisories'],['Implementation schedule',`7 days: drains, irrigation, scouting. 15 days: seed and input decisions. 30 days: insurance and storage. 60 days: review and rotate crops`],['Monitoring','Soil moisture daily; rainfall and IMD alerts daily; NDVI every 5 days; pest scouting weekly'],['Emergency response','Move inputs and produce to high ground, open drains, switch to backup water and power, call the agricultural office, protect livestock and workers'],['Evaluation','Review yield and losses after each season, compare forecasts to outcomes, and update this plan']];
+$('axPlan').innerHTML=P.map(p=>`<tr><td><strong>${p[0]}</strong></td><td>${p[1]}</td></tr>`).join('');
+const A=[...document.querySelectorAll('#plan li')].map(li=>`<li><strong>${li.querySelector('.when').textContent}:</strong> ${li.querySelector('strong').textContent}. ${li.querySelector('div').lastChild.textContent}</li>`);
+A.push('<li><strong>Insurance:</strong> Check crop insurance cover before the next risk window.</li>','<li><strong>Market:</strong> Line up storage and buyers before harvest to reduce price risk.</li>');
+$('axAct').innerHTML=A.join('');}
+const _u=update;update=function(){_u();ax()};
+for(const id of ['soil','rain','ndvi','onset','temp','crop','fsz'])$(id).addEventListener('input',ax);$('region').addEventListener('change',ax);
+ax();
+})();
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+/* more locations, originals kept */
+const NEW={jaipur:['Jaipur, Rajasthan',{soil:12,rain:-35,ndvi:-.06,onset:6,temp:2.5,crop:'wheat'}],hisar:['Hisar, Haryana',{soil:20,rain:-15,ndvi:0,onset:3,temp:2,crop:'wheat'}],meerut:['Meerut, Uttar Pradesh',{soil:30,rain:0,ndvi:.02,onset:2,temp:1,crop:'wheat'}],nagpur:['Nagpur, Maharashtra',{soil:22,rain:-20,ndvi:-.03,onset:6,temp:1.5,crop:'cotton'}],rajkot:['Rajkot, Gujarat',{soil:16,rain:-30,ndvi:-.05,onset:7,temp:2,crop:'cotton'}],raichur:['Raichur, Karnataka',{soil:15,rain:-30,ndvi:-.06,onset:8,temp:2,crop:'cotton'}],bhopal:['Bhopal, Madhya Pradesh',{soil:30,rain:10,ndvi:.02,onset:5,temp:.5,crop:'soy'}],bardhaman:['Purba Bardhaman, West Bengal',{soil:42,rain:30,ndvi:.02,onset:2,temp:0,crop:'rice'}],cuttack:['Cuttack, Odisha',{soil:44,rain:45,ndvi:.01,onset:3,temp:0,crop:'rice'}],jorhat:['Jorhat, Assam',{soil:50,rain:70,ndvi:.01,onset:1,temp:-.5,crop:'rice'}],chikmagalur:['Chikkamagaluru, Karnataka',{soil:44,rain:60,ndvi:.02,onset:1,temp:-.5,crop:'coffee'}],raipur:['Raipur, Chhattisgarh',{soil:32,rain:5,ndvi:.01,onset:4,temp:1,crop:'rice'}],lucknow:['Lucknow, Uttar Pradesh',{soil:28,rain:-5,ndvi:.01,onset:3,temp:1,crop:'wheat'}],amritsar:['Amritsar, Punjab',{soil:27,rain:-8,ndvi:.01,onset:2,temp:1.5,crop:'wheat'}],karnal:['Karnal, Haryana',{soil:34,rain:5,ndvi:.02,onset:2,temp:1,crop:'rice'}],dehradun:['Dehradun, Uttarakhand',{soil:36,rain:15,ndvi:.02,onset:1,temp:0,crop:'wheat'}],kangra:['Kangra, Himachal Pradesh',{soil:33,rain:10,ndvi:.02,onset:1,temp:-.5,crop:'wheat'}],muzaffarpur:['Muzaffarpur, Bihar',{soil:38,rain:20,ndvi:.01,onset:3,temp:.5,crop:'rice'}],ranchi:['Ranchi, Jharkhand',{soil:30,rain:-12,ndvi:-.02,onset:5,temp:1,crop:'rice'}],gangganagar:['Sri Ganganagar, Rajasthan',{soil:14,rain:-30,ndvi:-.04,onset:5,temp:2.5,crop:'cotton'}],kota:['Kota, Rajasthan',{soil:24,rain:-10,ndvi:0,onset:5,temp:1.5,crop:'soy'}],ujjain:['Ujjain, Madhya Pradesh',{soil:27,rain:0,ndvi:.01,onset:6,temp:1,crop:'soy'}],latur:['Latur, Maharashtra',{soil:13,rain:-40,ndvi:-.08,onset:8,temp:2.5,crop:'soy'}],kolhapur:['Kolhapur, Maharashtra',{soil:40,rain:35,ndvi:.02,onset:3,temp:0,crop:'rice'}],surendranagar:['Surendranagar, Gujarat',{soil:15,rain:-30,ndvi:-.05,onset:7,temp:2.5,crop:'cotton'}],bastar:['Bastar, Chhattisgarh',{soil:40,rain:25,ndvi:.02,onset:3,temp:0,crop:'rice'}],bargarh:['Bargarh, Odisha',{soil:30,rain:0,ndvi:.01,onset:4,temp:1.5,crop:'rice'}],dibrugarh:['Dibrugarh, Assam',{soil:52,rain:80,ndvi:.01,onset:0,temp:-.5,crop:'rice'}],nellore:['Nellore, Andhra Pradesh',{soil:26,rain:-15,ndvi:0,onset:6,temp:1.5,crop:'rice'}],karimnagar:['Karimnagar, Telangana',{soil:29,rain:5,ndvi:.01,onset:4,temp:1,crop:'rice'}],dharwad:['Dharwad, Karnataka',{soil:24,rain:-15,ndvi:-.02,onset:6,temp:1,crop:'cotton'}],hassan:['Hassan, Karnataka',{soil:42,rain:40,ndvi:.02,onset:2,temp:-.5,crop:'coffee'}],idukki:['Idukki, Kerala',{soil:46,rain:70,ndvi:.01,onset:3,temp:-.5,crop:'coffee'}],coimbatore:['Coimbatore, Tamil Nadu',{soil:22,rain:-20,ndvi:-.02,onset:6,temp:1.5,crop:'cotton'}],madurai:['Madurai, Tamil Nadu',{soil:20,rain:-25,ndvi:-.03,onset:7,temp:2,crop:'rice'}]};
+const sel=$('region');for(const k in NEW){PRESET[k]=NEW[k][1];const o=document.createElement('option');o.value=k;o.textContent=NEW[k][0];sel.appendChild(o)}
+/* hero chips */
+const hp=document.querySelector('.hero .rain');hp.insertAdjacentHTML('beforebegin','<div class="chips"><span>🛰️ Copernicus</span><span>🇮🇳 ISRO · INSAT</span><span>🌦️ IMD</span><span>🌱 49 locations</span><span>🗣️ 6 languages · read aloud</span></div>');
+/* read-aloud for every section */
+const CAN='speechSynthesis' in window&&'SpeechSynthesisUtterance' in window;
+const LAB={en:['🔊 Listen to this section','⏹ Stop'],hi:['🔊 यह भाग सुनें','⏹ रोकें'],ml:['🔊 ഈ ഭാഗം കേൾക്കൂ','⏹ നിർത്തൂ'],ta:['🔊 இந்தப் பகுதியைக் கேளுங்கள்','⏹ நிறுத்து'],te:['🔊 ఈ భాగం వినండి','⏹ ఆపండి'],mr:['🔊 हा भाग ऐका','⏹ थांबवा']};
+let cur=null,tok=0;const btns=[];
+function stop(){tok++;ttsStop();cur=null;lab()}
+function lab(){btns.forEach(b=>{const on=b===cur;b.classList.toggle('on',on);b.textContent=LAB[lang][on?1:0]})}
+function say(b,root){
+ if(cur===b){stop();return}
+ stop();cur=b;lab();const my=tok;
+ const c=root.cloneNode(true);c.querySelectorAll('svg,script,style,button,select,input,.chart-wrap,.rain').forEach(n=>n.remove());
+ const parts=(c.innerText||c.textContent).replace(/\s+/g,' ').split(/(?<=[.!?।])\s+/).reduce((a,t)=>{if(a.length&&a[a.length-1].length+t.length<180)a[a.length-1]+=' '+t;else a.push(t);return a},[]).filter(t=>t.trim());
+ ttsPlay(parts,()=>{if(tok===my)stop()},()=>{if(tok===my)alert(LS[lang][2])});
+}
+document.querySelectorAll('header .hero,section').forEach(sec=>{
+ const h=sec.querySelector('h1,h2');if(!h)return;
+ const b=document.createElement('button');b.type='button';b.className='sl no-print';b.setAttribute('aria-live','polite');
+ b.addEventListener('click',()=>say(b,sec.classList.contains('hero')?sec:sec.querySelector('.wrap')||sec));
+ h.after(b);btns.push(b);
+});
+document.querySelectorAll('#analysis h3').forEach(h=>{
+ if(!/^[567]\./.test(h.textContent))return;
+ const b=document.createElement('button');b.type='button';b.className='sl no-print';b.setAttribute('aria-live','polite');
+ const root={cloneNode:()=>{const d=document.createElement('div');d.append(h.cloneNode(true));let n=h.nextElementSibling;
+  while(n&&n.tagName!=='H3'){if(!n.classList.contains('sl')&&n.tagName!=='BUTTON'){const c=n.cloneNode(true);c.querySelectorAll('li,h4,td,th').forEach(e=>e.append('. '));d.append(c)}n=n.nextElementSibling}
+  return d}};
+ b.addEventListener('click',()=>say(b,root));h.after(b);btns.push(b);
+});
+lab();$('lang').addEventListener('change',()=>{stop()});
+/* fade-in on scroll */
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}}),{threshold:.08});
+ document.querySelectorAll('section .wrap').forEach(n=>{n.classList.add('sec-in');io.observe(n)})}
+load(sel.value);
+})();
+</script>
+<style>
+#vaBtn{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:9998;width:60px;height:60px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);font:700 1.5rem var(--body);cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1}
+#vaBtn small{font:600 .6rem var(--body);margin-top:2px;letter-spacing:.04em}
+#vaBtn:focus-visible,#vaPanel button:focus-visible,#vaPanel select:focus-visible,#vaPanel input:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+#vaPanel{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(max(18px,env(safe-area-inset-bottom,0px)) + 72px);z-index:9999;width:min(380px,calc(100vw - 28px));height:min(560px,calc(100vh - 120px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.35);display:none;flex-direction:column;overflow:hidden;font-family:var(--body)}
+#vaPanel.open{display:flex}
+#vaHead{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--hero);color:var(--hero-ink)}
+#vaHead b{flex:1;font:700 1rem var(--head)}
+#vaHead select{max-width:112px;padding:5px 6px;border-radius:6px;border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff;font:500 .8rem var(--body)}
+#vaHead select option{color:#14282B}
+#vaX{background:none;border:0;color:inherit;font-size:1.3rem;cursor:pointer;padding:2px 6px}
+#vaMsgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:var(--bg)}
+.vaM{max-width:88%;padding:10px 12px;border-radius:12px;font-size:.93rem;line-height:1.5;white-space:pre-wrap;word-wrap:break-word}
+.vaM.b{align-self:flex-start;background:var(--surface);border:1px solid var(--line)}
+.vaM.u{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.vaM .vaS{display:block;margin-top:6px;background:none;border:1px solid var(--line);color:var(--accent);border-radius:999px;padding:3px 10px;font:500 .78rem var(--body);cursor:pointer}
+#vaChips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 0;background:var(--bg)}
+#vaChips button{border:1px solid var(--accent);background:var(--surface);color:var(--accent);border-radius:999px;padding:5px 11px;font:500 .8rem var(--body);cursor:pointer}
+#vaForm{display:flex;gap:6px;padding:10px 12px;border-top:1px solid var(--line);background:var(--surface)}
+#vaIn{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);font:400 .95rem var(--body)}
+#vaForm button{border:0;border-radius:999px;padding:0 14px;min-height:40px;cursor:pointer;font:600 .9rem var(--body);background:var(--accent);color:var(--accent-ink)}
+#vaMic{background:var(--surface)!important;color:var(--accent)!important;border:1px solid var(--accent)!important;font-size:1.05rem!important}
+#vaMic.on{background:var(--bad)!important;color:#fff!important;border-color:var(--bad)!important}
+#vaToast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#14282B;color:#fff;padding:10px 16px;border-radius:10px;font:500 .88rem var(--body);z-index:10000;display:none;max-width:90vw;text-align:center}
+@media print{#vaBtn,#vaPanel,#vaToast{display:none!important}}
+</style>
+<button id="vaBtn" type="button" aria-label="AI Assistant" aria-expanded="false" aria-controls="vaPanel"><span aria-hidden="true">🤖</span><small>AI</small></button>
+<div id="vaPanel" role="dialog" aria-label="AI Assistant">
+ <div id="vaHead"><b id="vaTtl">Ask Varsha</b>
+  <select id="vaLang" aria-label="Language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="ml">മലയാളം</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="kn">ಕನ್ನಡ</option></select>
+  <button id="vaX" type="button" aria-label="Close">✕</button></div>
+ <div id="vaMsgs" aria-live="polite"></div>
+ <div id="vaChips"></div>
+ <div id="vaForm"><button id="vaMic" type="button" aria-label="Speak">🎤</button><input id="vaIn" type="text" autocomplete="off"><button id="vaSend" type="button">Send</button></div>
+</div>
+<div id="vaToast" role="status"></div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const AI={
+en:{ttl:'Ask Varsha',ph:'Ask about weather, crop or field…',send:'Send',ls:'🔊 Listen',
+ chips:[['Plot risk','risk'],['Drought','dry'],['Flood','fl'],['Disease','di'],['Sowing','so'],['Insurance','ins']],lvl:['Low','Medium','High'],
+ crop:{rice:'Paddy',cotton:'Cotton',coffee:'Coffee and pepper',wheat:'Wheat',soy:'Soybean'},
+ wel:'Namaste! I am the Varsha Assistant. Ask me about climate, rain, drought, flood, disease, heat, sowing or insurance for your plot. I use the plot values chosen above.',
+ risk:'{cr}, {r}: drought risk {d}/100 ({ld}), flood risk {f}/100 ({lf}), disease risk {u}/100 ({lu}). Yield at risk: about {L}%. Ask me about drought, flood, disease, heat, sowing or insurance for steps.',
+ dry:['Drought risk is {d}/100 ({ld}). Soil moisture {s}%, rain {rn}% vs normal.','Irrigate in the critical growth stages, mulch to cut evaporation and keep water in reserve for flowering.','Water is adequate for now. Keep checking soil moisture every week.'],
+ fl:['Flood risk is {f}/100 ({lf}). Rain is {rn}% vs normal, soil moisture {s}%.','Clear drainage channels, move seed, fertiliser and harvested produce to higher ground, and hold back fertiliser until the rain passes.','No flood threat now. Keep drains clear before heavy showers.'],
+ di:['Disease and pest risk is {u}/100 ({lu}).','Scout the field every week for spots and mould, remove infected leaves, and spray preventively in dry spells. Consult your agriculture officer for the right product.','Risk is low. Keep scouting and avoid over-watering.'],
+ he:['Temperature is {t} °C vs normal.','Irrigate in the evening, mulch the soil and avoid field work at noon.','No heat stress expected now.'],
+ so:['Monsoon onset is {o} days late.','Wait for a soaking rain before sowing, keep seed ready and consider short-duration varieties.','Onset is near normal. Sow once the soil is moist after good rains.'],
+ yld:'Without action, {cr} could lose about {L}% yield: from a normal {y} t/ha to about {ey} t/ha. Timely irrigation or drainage and disease scouting reduce this.',
+ ins:'Check your crop insurance cover (for example PMFBY) and its last enrolment date before the next risk window, keep emergency savings, and arrange storage and buyers before harvest.',
+ fb:'I can help with climate and field questions: risk summary, drought and irrigation, flood and drainage, disease and pests, heat, sowing time, yield and insurance. Please ask about one of these.'},
+hi:{ttl:'वर्षा सहायक',ph:'मौसम, फसल या खेत के बारे में पूछें…',send:'भेजें',ls:'🔊 सुनें',
+ chips:[['खेत का जोखिम','risk'],['सूखा','dry'],['बाढ़','fl'],['रोग','di'],['बुवाई','so'],['बीमा','ins']],lvl:['कम','मध्यम','अधिक'],
+ crop:{rice:'धान',cotton:'कपास',coffee:'कॉफ़ी और काली मिर्च',wheat:'गेहूँ',soy:'सोयाबीन'},
+ wel:'नमस्ते! मैं वर्षा सहायक हूँ। अपने खेत के मौसम, बारिश, सूखा, बाढ़, रोग, गर्मी, बुवाई या बीमा के बारे में पूछें। मैं ऊपर चुने गए खेत के आँकड़ों का उपयोग करता हूँ।',
+ risk:'{r} में {cr}: सूखे का जोखिम {d}/100 ({ld}), बाढ़ का जोखिम {f}/100 ({lf}), रोग का जोखिम {u}/100 ({lu}). उपज पर खतरा: लगभग {L}%. उपाय जानने के लिए सूखा, बाढ़, रोग, गर्मी, बुवाई या बीमा के बारे में पूछें।',
+ dry:['सूखे का जोखिम {d}/100 ({ld}) है। मिट्टी में नमी {s}% और वर्षा सामान्य से {rn}%।','फसल की महत्वपूर्ण अवस्थाओं में सिंचाई करें, मल्चिंग से वाष्पीकरण घटाएँ और फूल आने के लिए पानी बचाकर रखें।','अभी पानी पर्याप्त है। हर हफ्ते मिट्टी की नमी जाँचते रहें।'],
+ fl:['बाढ़ का जोखिम {f}/100 ({lf}) है। वर्षा सामान्य से {rn}% और मिट्टी में नमी {s}%।','जल निकासी की नालियाँ साफ करें, बीज, खाद और कटी उपज ऊँची जगह रखें और बारिश थमने तक खाद न डालें।','अभी बाढ़ का खतरा नहीं है। भारी बारिश से पहले नालियाँ साफ रखें।'],
+ di:['रोग और कीट का जोखिम {u}/100 ({lu}) है।','हर हफ्ते खेत में धब्बे और फफूंद देखें, संक्रमित पत्ते हटाएँ और सूखे मौसम में बचाव का छिड़काव करें। सही दवा के लिए कृषि अधिकारी से सलाह लें।','जोखिम कम है। निगरानी जारी रखें और अधिक सिंचाई से बचें।'],
+ he:['तापमान सामान्य से {t} °C है।','शाम को सिंचाई करें, मिट्टी पर मल्च डालें और दोपहर में खेत का काम टालें।','अभी गर्मी का तनाव नहीं है।'],
+ so:['मानसून की शुरुआत {o} दिन देर से है।','बुवाई से पहले अच्छी बारिश का इंतजार करें, बीज तैयार रखें और कम अवधि की किस्मों पर विचार करें।','शुरुआत लगभग सामान्य है। अच्छी बारिश के बाद मिट्टी नम होने पर बुवाई करें।'],
+ yld:'कुछ न करने पर {cr} की उपज लगभग {L}% घट सकती है: सामान्य {y} टन/हेक्टेयर से लगभग {ey} टन/हेक्टेयर। समय पर सिंचाई या जल निकासी और रोग की निगरानी से यह कम होगा।',
+ ins:'अगले जोखिम काल से पहले अपनी फसल बीमा (जैसे PMFBY) और उसकी अंतिम तिथि जाँचें, आपात बचत रखें और कटाई से पहले भंडारण व खरीदार तय करें।',
+ fb:'मैं जलवायु और खेत से जुड़े सवालों में मदद कर सकता हूँ: जोखिम सार, सूखा और सिंचाई, बाढ़ और जल निकासी, रोग और कीट, गर्मी, बुवाई का समय, उपज और बीमा। कृपया इनमें से कुछ पूछें।'},
+ml:{ttl:'വർഷ സഹായി',ph:'കാലാവസ്ഥ, വിള, കൃഷിയിടം…',send:'അയയ്ക്കുക',ls:'🔊 കേൾക്കൂ',
+ chips:[['പ്ലോട്ട് അപകടം','risk'],['വരൾച്ച','dry'],['വെള്ളപ്പൊക്കം','fl'],['രോഗം','di'],['വിതയ്ക്കൽ','so'],['ഇൻഷുറൻസ്','ins']],lvl:['കുറവ്','ഇടത്തരം','ഉയർന്നത്'],
+ crop:{rice:'നെല്ല്',cotton:'പരുത്തി',coffee:'കാപ്പിയും കുരുമുളകും',wheat:'ഗോതമ്പ്',soy:'സോയാബീൻ'},
+ wel:'നമസ്കാരം! ഞാൻ വർഷ സഹായി. നിങ്ങളുടെ പ്ലോട്ടിലെ കാലാവസ്ഥ, മഴ, വരൾച്ച, വെള്ളപ്പൊക്കം, രോഗം, ചൂട്, വിതയ്ക്കൽ, ഇൻഷുറൻസ് എന്നിവയെക്കുറിച്ച് ചോദിക്കൂ. മുകളിൽ തിരഞ്ഞെടുത്ത പ്ലോട്ടിന്റെ മൂല്യങ്ങളാണ് ഞാൻ ഉപയോഗിക്കുന്നത്.',
+ risk:'{r}, {cr}: വരൾച്ചാ സാധ്യത {d}/100 ({ld}), വെള്ളപ്പൊക്ക സാധ്യത {f}/100 ({lf}), രോഗ സാധ്യത {u}/100 ({lu}). വിളവിന് ഭീഷണി: ഏകദേശം {L}%. നടപടികൾക്കായി വരൾച്ച, വെള്ളപ്പൊക്കം, രോഗം, ചൂട്, വിതയ്ക്കൽ, ഇൻഷുറൻസ് എന്നിവയെക്കുറിച്ച് ചോദിക്കൂ.',
+ dry:['വരൾച്ചാ സാധ്യത {d}/100 ({ld}) ആണ്. മണ്ണിലെ ഈർപ്പം {s}%, മഴ സാധാരണയെക്കാൾ {rn}%.','വിളയുടെ നിർണായക വളർച്ചാ ഘട്ടങ്ങളിൽ നനയ്ക്കുക, ബാഷ്പീകരണം കുറയ്ക്കാൻ പുതയിടുക, പൂവിടൽ സമയത്തേക്ക് വെള്ളം കരുതിവയ്ക്കുക.','ഇപ്പോൾ വെള്ളം മതിയാകും. ആഴ്ചതോറും മണ്ണിലെ ഈർപ്പം പരിശോധിക്കുക.'],
+ fl:['വെള്ളപ്പൊക്ക സാധ്യത {f}/100 ({lf}) ആണ്. മഴ സാധാരണയെക്കാൾ {rn}%, മണ്ണിലെ ഈർപ്പം {s}%.','നീർച്ചാലുകൾ വൃത്തിയാക്കുക, വിത്തും വളവും വിളവെടുത്ത ഉൽപ്പന്നങ്ങളും ഉയർന്ന സ്ഥലത്തേക്ക് മാറ്റുക, മഴ മാറുംവരെ വളം ഇടരുത്.','ഇപ്പോൾ വെള്ളപ്പൊക്ക ഭീഷണിയില്ല. കനത്ത മഴയ്ക്ക് മുമ്പ് ചാലുകൾ വൃത്തിയാക്കി വയ്ക്കുക.'],
+ di:['രോഗ, കീട സാധ്യത {u}/100 ({lu}) ആണ്.','ആഴ്ചതോറും തോട്ടത്തിൽ പുള്ളികളും പൂപ്പലും നോക്കുക, രോഗം ബാധിച്ച ഇലകൾ നീക്കുക, ഉണങ്ങിയ കാലാവസ്ഥയിൽ പ്രതിരോധ തളി നടത്തുക. ശരിയായ മരുന്നിന് കൃഷി ഓഫീസറെ സമീപിക്കുക.','സാധ്യത കുറവാണ്. നിരീക്ഷണം തുടരുക, അമിത നനവ് ഒഴിവാക്കുക.'],
+ he:['താപനില സാധാരണയെക്കാൾ {t} °C ആണ്.','വൈകുന്നേരം നനയ്ക്കുക, മണ്ണിൽ പുതയിടുക, ഉച്ചയ്ക്ക് കൃഷിപ്പണി ഒഴിവാക്കുക.','ഇപ്പോൾ ചൂടിന്റെ സമ്മർദ്ദം പ്രതീക്ഷിക്കുന്നില്ല.'],
+ so:['മൺസൂൺ ആരംഭം {o} ദിവസം വൈകിയാണ്.','വിതയ്ക്കുന്നതിന് മുമ്പ് നല്ല മഴയ്ക്കായി കാത്തിരിക്കുക, വിത്ത് തയ്യാറാക്കി വയ്ക്കുക, ഹ്രസ്വകാല ഇനങ്ങൾ പരിഗണിക്കുക.','ആരംഭം ഏകദേശം സാധാരണമാണ്. നല്ല മഴയ്ക്ക് ശേഷം മണ്ണ് നനഞ്ഞാൽ വിതയ്ക്കുക.'],
+ yld:'നടപടി എടുത്തില്ലെങ്കിൽ {cr} വിളവ് ഏകദേശം {L}% കുറയാം: സാധാരണ {y} ടൺ/ഹെക്ടർ എന്നതിൽ നിന്ന് ഏകദേശം {ey} ടൺ/ഹെക്ടറിലേക്ക്. സമയബന്ധിതമായ നന, നീർവാർച്ച, രോഗ നിരീക്ഷണം എന്നിവ ഇത് കുറയ്ക്കും.',
+ ins:'അടുത്ത അപകടകാലത്തിന് മുമ്പ് വിള ഇൻഷുറൻസ് (ഉദാ. PMFBY) പരിരക്ഷയും അവസാന തീയതിയും പരിശോധിക്കുക, അടിയന്തര സമ്പാദ്യം കരുതുക, വിളവെടുപ്പിന് മുമ്പ് സംഭരണവും വാങ്ങുന്നവരെയും ഒരുക്കുക.',
+ fb:'കാലാവസ്ഥയും കൃഷിയിടവുമായി ബന്ധപ്പെട്ട ചോദ്യങ്ങളിൽ എനിക്ക് സഹായിക്കാം: അപകട സംഗ്രഹം, വരൾച്ചയും നനയും, വെള്ളപ്പൊക്കവും നീർവാർച്ചയും, രോഗവും കീടവും, ചൂട്, വിതയ്ക്കൽ സമയം, വിളവ്, ഇൻഷുറൻസ്. ഇവയിലൊന്ന് ചോദിക്കൂ.'},
+ta:{ttl:'வர்ஷா உதவியாளர்',ph:'வானிலை, பயிர், வயல் பற்றி கேளுங்கள்…',send:'அனுப்பு',ls:'🔊 கேளுங்கள்',
+ chips:[['நில ஆபத்து','risk'],['வறட்சி','dry'],['வெள்ளம்','fl'],['நோய்','di'],['விதைப்பு','so'],['காப்பீடு','ins']],lvl:['குறைவு','நடுத்தரம்','அதிகம்'],
+ crop:{rice:'நெல்',cotton:'பருத்தி',coffee:'காபி மற்றும் மிளகு',wheat:'கோதுமை',soy:'சோயாபீன்'},
+ wel:'வணக்கம்! நான் வர்ஷா உதவியாளர். உங்கள் நிலத்தின் தட்பவெப்பம், மழை, வறட்சி, வெள்ளம், நோய், வெப்பம், விதைப்பு, காப்பீடு பற்றி கேளுங்கள். மேலே தேர்ந்தெடுத்த நிலத்தின் மதிப்புகளையே பயன்படுத்துகிறேன்.',
+ risk:'{r}, {cr}: வறட்சி ஆபத்து {d}/100 ({ld}), வெள்ள ஆபத்து {f}/100 ({lf}), நோய் ஆபத்து {u}/100 ({lu}). மகசூல் இழப்பு அபாயம்: சுமார் {L}%. வழிமுறைகளுக்கு வறட்சி, வெள்ளம், நோய், வெப்பம், விதைப்பு அல்லது காப்பீடு பற்றி கேளுங்கள்.',
+ dry:['வறட்சி ஆபத்து {d}/100 ({ld}). மண் ஈரப்பதம் {s}%, மழை இயல்பை விட {rn}%.','பயிரின் முக்கிய வளர்ச்சிக் கட்டங்களில் நீர் பாய்ச்சுங்கள், ஆவியாதலைக் குறைக்க மூடாக்கு இடுங்கள், பூக்கும் நேரத்துக்கு நீரைச் சேமியுங்கள்.','இப்போது தண்ணீர் போதுமானது. ஒவ்வொரு வாரமும் மண் ஈரப்பதத்தைப் பாருங்கள்.'],
+ fl:['வெள்ள ஆபத்து {f}/100 ({lf}). மழை இயல்பை விட {rn}%, மண் ஈரப்பதம் {s}%.','வடிகால்களைச் சுத்தம் செய்யுங்கள், விதை, உரம், அறுவடை செய்த விளைபொருளை உயரமான இடத்துக்கு மாற்றுங்கள், மழை நிற்கும் வரை உரமிடாதீர்கள்.','இப்போது வெள்ள அச்சுறுத்தல் இல்லை. கனமழைக்கு முன் வடிகால்களைச் சுத்தமாக வைத்திருங்கள்.'],
+ di:['நோய் மற்றும் பூச்சி ஆபத்து {u}/100 ({lu}).','ஒவ்வொரு வாரமும் வயலில் புள்ளிகள், பூஞ்சை உள்ளதா எனப் பாருங்கள், பாதித்த இலைகளை அகற்றுங்கள், வறண்ட நேரத்தில் தடுப்பு மருந்து தெளியுங்கள். சரியான மருந்துக்கு வேளாண் அலுவலரை அணுகுங்கள்.','ஆபத்து குறைவு. கண்காணிப்பைத் தொடருங்கள், அதிக நீர் பாய்ச்சுவதைத் தவிர்க்கவும்.'],
+ he:['வெப்பநிலை இயல்பை விட {t} °C.','மாலையில் நீர் பாய்ச்சுங்கள், மண்ணுக்கு மூடாக்கு இடுங்கள், நண்பகலில் வயல் வேலையைத் தவிர்க்கவும்.','இப்போது வெப்ப அழுத்தம் எதிர்பார்க்கப்படவில்லை.'],
+ so:['பருவமழை தொடக்கம் {o} நாள் தாமதம்.','விதைப்பதற்கு முன் நல்ல மழைக்காகக் காத்திருங்கள், விதையைத் தயாராக வைத்திருங்கள், குறுகிய கால ரகங்களைப் பரிசீலியுங்கள்.','தொடக்கம் ஏறக்குறைய இயல்பானது. நல்ல மழைக்குப் பின் மண் ஈரமானதும் விதையுங்கள்.'],
+ yld:'நடவடிக்கை எடுக்காவிட்டால் {cr} மகசூல் சுமார் {L}% குறையலாம்: இயல்பான {y} டன்/ஹெக்டேரிலிருந்து சுமார் {ey} டன்/ஹெக்டேருக்கு. சரியான நேரத்தில் நீர்ப்பாசனம் அல்லது வடிகால், நோய் கண்காணிப்பு இதைக் குறைக்கும்.',
+ ins:'அடுத்த ஆபத்துக் காலத்துக்கு முன் பயிர்க் காப்பீடு (எ.கா. PMFBY) மற்றும் கடைசி தேதியைச் சரிபாருங்கள், அவசரச் சேமிப்பை வைத்திருங்கள், அறுவடைக்கு முன் சேமிப்பு மற்றும் வாங்குபவர்களை ஏற்பாடு செய்யுங்கள்.',
+ fb:'தட்பவெப்பம், வயல் தொடர்பான கேள்விகளில் உதவுவேன்: ஆபத்து சுருக்கம், வறட்சி மற்றும் நீர்ப்பாசனம், வெள்ளம் மற்றும் வடிகால், நோய் மற்றும் பூச்சி, வெப்பம், விதைப்பு நேரம், மகசூல், காப்பீடு. இவற்றில் ஒன்றைக் கேளுங்கள்.'},
+te:{ttl:'వర్ష సహాయకుడు',ph:'వాతావరణం, పంట, పొలం గురించి అడగండి…',send:'పంపండి',ls:'🔊 వినండి',
+ chips:[['పొలం ప్రమాదం','risk'],['కరువు','dry'],['వరద','fl'],['తెగులు','di'],['విత్తనం','so'],['బీమా','ins']],lvl:['తక్కువ','మధ్యస్థం','ఎక్కువ'],
+ crop:{rice:'వరి',cotton:'పత్తి',coffee:'కాఫీ మరియు మిరియాలు',wheat:'గోధుమ',soy:'సోయాబీన్'},
+ wel:'నమస్కారం! నేను వర్ష సహాయకుడిని. మీ పొలం వాతావరణం, వర్షం, కరువు, వరద, తెగులు, వేడి, విత్తనం, బీమా గురించి అడగండి. పైన ఎంచుకున్న పొలం విలువలనే వాడుతున్నాను.',
+ risk:'{r}, {cr}: కరువు ప్రమాదం {d}/100 ({ld}), వరద ప్రమాదం {f}/100 ({lf}), తెగుళ్ల ప్రమాదం {u}/100 ({lu}). దిగుబడికి ముప్పు: సుమారు {L}%. చర్యల కోసం కరువు, వరద, తెగులు, వేడి, విత్తనం లేదా బీమా గురించి అడగండి.',
+ dry:['కరువు ప్రమాదం {d}/100 ({ld}). నేల తేమ {s}%, వర్షం సాధారణం కంటే {rn}%.','పంట కీలక దశల్లో నీరు పారించండి, ఆవిరి తగ్గడానికి ఆచ్ఛాదన వేయండి, పూత సమయానికి నీటిని నిల్వ ఉంచండి.','ప్రస్తుతం నీరు సరిపోతుంది. ప్రతి వారం నేల తేమను చూడండి.'],
+ fl:['వరద ప్రమాదం {f}/100 ({lf}). వర్షం సాధారణం కంటే {rn}%, నేల తేమ {s}%.','నీటి కాలువలను శుభ్రం చేయండి, విత్తనాలు, ఎరువులు, కోసిన పంటను ఎత్తైన చోటుకు మార్చండి, వర్షం ఆగే వరకు ఎరువు వేయకండి.','ప్రస్తుతం వరద ముప్పు లేదు. భారీ వర్షాలకు ముందు కాలువలను శుభ్రంగా ఉంచండి.'],
+ di:['తెగుళ్లు, పురుగుల ప్రమాదం {u}/100 ({lu}).','ప్రతి వారం పొలంలో మచ్చలు, బూజు ఉన్నాయేమో చూడండి, సోకిన ఆకులు తీసేయండి, పొడి వాతావరణంలో నివారణ మందు పిచికారీ చేయండి. సరైన మందు కోసం వ్యవసాయ అధికారిని సంప్రదించండి.','ప్రమాదం తక్కువ. పర్యవేక్షణ కొనసాగించండి, ఎక్కువ నీరు పెట్టకండి.'],
+ he:['ఉష్ణోగ్రత సాధారణం కంటే {t} °C.','సాయంత్రం నీరు పారించండి, నేలపై ఆచ్ఛాదన వేయండి, మధ్యాహ్నం పొలం పనులు మానండి.','ప్రస్తుతం వేడి ఒత్తిడి ఉండదు.'],
+ so:['రుతుపవనాల ఆరంభం {o} రోజులు ఆలస్యం.','విత్తే ముందు మంచి వర్షం కోసం ఆగండి, విత్తనాలు సిద్ధంగా ఉంచండి, తక్కువ కాలపు రకాలను పరిశీలించండి.','ఆరంభం దాదాపు సాధారణం. మంచి వర్షాల తర్వాత నేల తడిగా ఉన్నప్పుడు విత్తండి.'],
+ yld:'చర్యలు తీసుకోకపోతే {cr} దిగుబడి సుమారు {L}% తగ్గవచ్చు: సాధారణ {y} టన్ను/హెక్టారు నుండి సుమారు {ey} టన్ను/హెక్టారుకు. సకాలంలో నీటి తడి లేదా నీటి పారుదల, తెగుళ్ల పర్యవేక్షణ దీన్ని తగ్గిస్తాయి.',
+ ins:'తదుపరి ప్రమాద కాలానికి ముందు పంట బీమా (ఉదా. PMFBY) రక్షణ, చివరి తేదీని చూడండి, అత్యవసర పొదుపు ఉంచుకోండి, కోతకు ముందు నిల్వ, కొనుగోలుదారులను ఏర్పాటు చేసుకోండి.',
+ fb:'వాతావరణం, పొలం ప్రశ్నల్లో సహాయం చేయగలను: ప్రమాద సారాంశం, కరువు మరియు నీటి తడి, వరద మరియు నీటి పారుదల, తెగుళ్లు, వేడి, విత్తే సమయం, దిగుబడి, బీమా. వీటిలో ఒకటి అడగండి.'},
+mr:{ttl:'वर्षा सहाय्यक',ph:'हवामान, पीक किंवा शेताबद्दल विचारा…',send:'पाठवा',ls:'🔊 ऐका',
+ chips:[['शेताचा धोका','risk'],['दुष्काळ','dry'],['पूर','fl'],['रोग','di'],['पेरणी','so'],['विमा','ins']],lvl:['कमी','मध्यम','जास्त'],
+ crop:{rice:'भात',cotton:'कापूस',coffee:'कॉफी आणि मिरी',wheat:'गहू',soy:'सोयाबीन'},
+ wel:'नमस्कार! मी वर्षा सहाय्यक आहे. तुमच्या शेताचे हवामान, पाऊस, दुष्काळ, पूर, रोग, उष्णता, पेरणी किंवा विमा याबद्दल विचारा. वर निवडलेल्या शेताची मूल्ये मी वापरतो.',
+ risk:'{r}, {cr}: दुष्काळाचा धोका {d}/100 ({ld}), पुराचा धोका {f}/100 ({lf}), रोगाचा धोका {u}/100 ({lu}). उत्पादनाला धोका: सुमारे {L}%. उपायांसाठी दुष्काळ, पूर, रोग, उष्णता, पेरणी किंवा विमा याबद्दल विचारा.',
+ dry:['दुष्काळाचा धोका {d}/100 ({ld}) आहे. मातीतील ओलावा {s}%, पाऊस सरासरीपेक्षा {rn}%.','पिकाच्या महत्त्वाच्या वाढीच्या टप्प्यांत पाणी द्या, बाष्पीभवन कमी करण्यासाठी आच्छादन टाका आणि फुलोऱ्यासाठी पाणी राखून ठेवा.','सध्या पाणी पुरेसे आहे. दर आठवड्याला मातीतील ओलावा तपासा.'],
+ fl:['पुराचा धोका {f}/100 ({lf}) आहे. पाऊस सरासरीपेक्षा {rn}%, मातीतील ओलावा {s}%.','निचऱ्याचे चर साफ करा, बियाणे, खते आणि काढलेला माल उंच जागी हलवा आणि पाऊस थांबेपर्यंत खत देऊ नका.','सध्या पुराचा धोका नाही. जोरदार पावसापूर्वी चर मोकळे ठेवा.'],
+ di:['रोग आणि किडींचा धोका {u}/100 ({lu}) आहे.','दर आठवड्याला शेतात डाग आणि बुरशी तपासा, बाधित पाने काढा आणि कोरड्या हवामानात प्रतिबंधक फवारणी करा. योग्य औषधासाठी कृषी अधिकाऱ्यांचा सल्ला घ्या.','धोका कमी आहे. निरीक्षण सुरू ठेवा आणि जास्त पाणी देणे टाळा.'],
+ he:['तापमान सरासरीपेक्षा {t} °C आहे.','सायंकाळी पाणी द्या, जमिनीवर आच्छादन टाका आणि दुपारी शेतातील कामे टाळा.','सध्या उष्णतेचा ताण अपेक्षित नाही.'],
+ so:['मान्सूनची सुरुवात {o} दिवस उशिरा आहे.','पेरणीपूर्वी चांगल्या पावसाची वाट पाहा, बियाणे तयार ठेवा आणि कमी कालावधीच्या वाणांचा विचार करा.','सुरुवात जवळपास सामान्य आहे. चांगल्या पावसानंतर जमीन ओली झाल्यावर पेरणी करा.'],
+ yld:'काही उपाय न केल्यास {cr} चे उत्पादन सुमारे {L}% घटू शकते: सामान्य {y} टन/हेक्टर वरून सुमारे {ey} टन/हेक्टर. वेळेवर सिंचन किंवा निचरा आणि रोगांचे निरीक्षण यामुळे हे कमी होईल.',
+ ins:'पुढील धोक्याच्या काळापूर्वी पीक विमा (उदा. PMFBY) संरक्षण आणि अंतिम तारीख तपासा, आपत्कालीन बचत ठेवा आणि काढणीपूर्वी साठवणूक व खरेदीदार निश्चित करा.',
+ fb:'मी हवामान आणि शेतीच्या प्रश्नांत मदत करू शकतो: धोक्याचा सारांश, दुष्काळ आणि सिंचन, पूर आणि निचरा, रोग आणि कीड, उष्णता, पेरणीची वेळ, उत्पादन आणि विमा. यापैकी काही विचारा.'},
+kn:{ttl:'ವರ್ಷಾ ಸಹಾಯಕ',ph:'ಹವಾಮಾನ, ಬೆಳೆ, ಹೊಲದ ಬಗ್ಗೆ ಕೇಳಿ…',send:'ಕಳುಹಿಸಿ',ls:'🔊 ಕೇಳಿ',
+ chips:[['ಹೊಲದ ಅಪಾಯ','risk'],['ಬರ','dry'],['ಪ್ರವಾಹ','fl'],['ರೋಗ','di'],['ಬಿತ್ತನೆ','so'],['ವಿಮೆ','ins']],lvl:['ಕಡಿಮೆ','ಮಧ್ಯಮ','ಹೆಚ್ಚು'],
+ crop:{rice:'ಭತ್ತ',cotton:'ಹತ್ತಿ',coffee:'ಕಾಫಿ ಮತ್ತು ಕಾಳುಮೆಣಸು',wheat:'ಗೋಧಿ',soy:'ಸೋಯಾಬೀನ್'},
+ wel:'ನಮಸ್ಕಾರ! ನಾನು ವರ್ಷಾ ಸಹಾಯಕ. ನಿಮ್ಮ ಹೊಲದ ಹವಾಮಾನ, ಮಳೆ, ಬರ, ಪ್ರವಾಹ, ರೋಗ, ಶಾಖ, ಬಿತ್ತನೆ, ವಿಮೆ ಬಗ್ಗೆ ಕೇಳಿ. ಮೇಲೆ ಆಯ್ಕೆ ಮಾಡಿದ ಹೊಲದ ಮೌಲ್ಯಗಳನ್ನೇ ನಾನು ಬಳಸುತ್ತೇನೆ.',
+ risk:'{r}, {cr}: ಬರದ ಅಪಾಯ {d}/100 ({ld}), ಪ್ರವಾಹದ ಅಪಾಯ {f}/100 ({lf}), ರೋಗದ ಅಪಾಯ {u}/100 ({lu}). ಇಳುವರಿಗೆ ಅಪಾಯ: ಸುಮಾರು {L}%. ಕ್ರಮಗಳಿಗಾಗಿ ಬರ, ಪ್ರವಾಹ, ರೋಗ, ಶಾಖ, ಬಿತ್ತನೆ ಅಥವಾ ವಿಮೆ ಬಗ್ಗೆ ಕೇಳಿ.',
+ dry:['ಬರದ ಅಪಾಯ {d}/100 ({ld}). ಮಣ್ಣಿನ ತೇವಾಂಶ {s}%, ಮಳೆ ಸಾಮಾನ್ಯಕ್ಕಿಂತ {rn}%.','ಬೆಳೆಯ ಪ್ರಮುಖ ಬೆಳವಣಿಗೆಯ ಹಂತಗಳಲ್ಲಿ ನೀರು ಹಾಯಿಸಿ, ಆವಿಯಾಗುವಿಕೆ ಕಡಿಮೆ ಮಾಡಲು ಹೊದಿಕೆ ಹಾಕಿ, ಹೂ ಬಿಡುವ ಸಮಯಕ್ಕೆ ನೀರು ಉಳಿಸಿ.','ಈಗ ನೀರು ಸಾಕಾಗುತ್ತದೆ. ಪ್ರತಿ ವಾರ ಮಣ್ಣಿನ ತೇವಾಂಶ ಪರೀಕ್ಷಿಸಿ.'],
+ fl:['ಪ್ರವಾಹದ ಅಪಾಯ {f}/100 ({lf}). ಮಳೆ ಸಾಮಾನ್ಯಕ್ಕಿಂತ {rn}%, ಮಣ್ಣಿನ ತೇವಾಂಶ {s}%.','ಚರಂಡಿಗಳನ್ನು ಸ್ವಚ್ಛಗೊಳಿಸಿ, ಬೀಜ, ಗೊಬ್ಬರ ಮತ್ತು ಕೊಯ್ಲು ಮಾಡಿದ ಉತ್ಪನ್ನಗಳನ್ನು ಎತ್ತರದ ಜಾಗಕ್ಕೆ ಸಾಗಿಸಿ, ಮಳೆ ನಿಲ್ಲುವವರೆಗೆ ಗೊಬ್ಬರ ಹಾಕಬೇಡಿ.','ಈಗ ಪ್ರವಾಹದ ಭೀತಿ ಇಲ್ಲ. ಭಾರೀ ಮಳೆಗೆ ಮೊದಲು ಚರಂಡಿಗಳನ್ನು ಸ್ವಚ್ಛವಾಗಿಡಿ.'],
+ di:['ರೋಗ ಮತ್ತು ಕೀಟದ ಅಪಾಯ {u}/100 ({lu}).','ಪ್ರತಿ ವಾರ ಹೊಲದಲ್ಲಿ ಚುಕ್ಕೆ ಮತ್ತು ಬೂಜು ಇದೆಯೇ ನೋಡಿ, ಬಾಧಿತ ಎಲೆಗಳನ್ನು ತೆಗೆಯಿರಿ, ಒಣ ವಾತಾವರಣದಲ್ಲಿ ತಡೆಗಟ್ಟುವ ಸಿಂಪರಣೆ ಮಾಡಿ. ಸರಿಯಾದ ಔಷಧಕ್ಕೆ ಕೃಷಿ ಅಧಿಕಾರಿಯನ್ನು ಸಂಪರ್ಕಿಸಿ.','ಅಪಾಯ ಕಡಿಮೆ. ನಿಗಾ ಮುಂದುವರಿಸಿ, ಹೆಚ್ಚು ನೀರು ಹಾಯಿಸಬೇಡಿ.'],
+ he:['ತಾಪಮಾನ ಸಾಮಾನ್ಯಕ್ಕಿಂತ {t} °C.','ಸಂಜೆ ನೀರು ಹಾಯಿಸಿ, ಮಣ್ಣಿಗೆ ಹೊದಿಕೆ ಹಾಕಿ, ಮಧ್ಯಾಹ್ನ ಹೊಲದ ಕೆಲಸ ಬಿಡಿ.','ಈಗ ಶಾಖದ ಒತ್ತಡ ನಿರೀಕ್ಷೆಯಿಲ್ಲ.'],
+ so:['ಮುಂಗಾರು ಆರಂಭ {o} ದಿನ ತಡ.','ಬಿತ್ತುವ ಮೊದಲು ಒಳ್ಳೆಯ ಮಳೆಗಾಗಿ ಕಾಯಿರಿ, ಬೀಜ ಸಿದ್ಧವಾಗಿಡಿ, ಕಡಿಮೆ ಅವಧಿಯ ತಳಿಗಳನ್ನು ಪರಿಗಣಿಸಿ.','ಆರಂಭ ಬಹುತೇಕ ಸಾಮಾನ್ಯ. ಒಳ್ಳೆಯ ಮಳೆಯ ನಂತರ ಮಣ್ಣು ಒದ್ದೆಯಾದಾಗ ಬಿತ್ತಿ.'],
+ yld:'ಕ್ರಮ ಕೈಗೊಳ್ಳದಿದ್ದರೆ {cr} ಇಳುವರಿ ಸುಮಾರು {L}% ಕುಸಿಯಬಹುದು: ಸಾಮಾನ್ಯ {y} ಟನ್/ಹೆಕ್ಟೇರ್‌ನಿಂದ ಸುಮಾರು {ey} ಟನ್/ಹೆಕ್ಟೇರ್‌ಗೆ. ಸಕಾಲದ ನೀರಾವರಿ ಅಥವಾ ಒಳಚರಂಡಿ ಮತ್ತು ರೋಗ ನಿಗಾ ಇದನ್ನು ಕಡಿಮೆ ಮಾಡುತ್ತದೆ.',
+ ins:'ಮುಂದಿನ ಅಪಾಯದ ಅವಧಿಗೆ ಮೊದಲು ಬೆಳೆ ವಿಮೆ (ಉದಾ. PMFBY) ರಕ್ಷಣೆ ಮತ್ತು ಕೊನೆಯ ದಿನಾಂಕ ಪರೀಕ್ಷಿಸಿ, ತುರ್ತು ಉಳಿತಾಯ ಇಟ್ಟುಕೊಳ್ಳಿ, ಕೊಯ್ಲಿಗೆ ಮೊದಲು ಸಂಗ್ರಹ ಮತ್ತು ಖರೀದಿದಾರರನ್ನು ಏರ್ಪಡಿಸಿ.',
+ fb:'ಹವಾಮಾನ ಮತ್ತು ಹೊಲದ ಪ್ರಶ್ನೆಗಳಲ್ಲಿ ಸಹಾಯ ಮಾಡಬಲ್ಲೆ: ಅಪಾಯದ ಸಾರಾಂಶ, ಬರ ಮತ್ತು ನೀರಾವರಿ, ಪ್ರವಾಹ ಮತ್ತು ಒಳಚರಂಡಿ, ರೋಗ ಮತ್ತು ಕೀಟ, ಶಾಖ, ಬಿತ್ತನೆ ಸಮಯ, ಇಳುವರಿ, ವಿಮೆ. ಇವುಗಳಲ್ಲಿ ಒಂದನ್ನು ಕೇಳಿ.'}
+};
+const KW={
+ yld:['yield','loss','production','उपज','उत्पादन','नुकसान','വിളവ്','നഷ്ടം','மகசூல்','இழப்பு','దిగుబడి','నష్టం','उत्पन्न','ಇಳುವರಿ','ನಷ್ಟ'],
+ ins:['insur','loan','scheme','pmfby','बीमा','विमा','कर्ज','ഇൻഷ','காப்பீடு','భీమా','బీమా','ವಿಮೆ','கடன்'],
+ dry:['drought','dry','irrigat','water','सूखा','सिंचाई','सिंचन','दुष्काळ','कोरड','पानी','വരൾച്ച','നന','വെള്ളം','ജലസേചന','வறட்சி','பாசன','தண்ணீர்','நீர்','కరువు','నీరు','నీటి','సాగునీరు','ಬರ','ನೀರು','ನೀರಾವರಿ'],
+ fl:['flood','rain','drain','बाढ़','बाढ','पूर','पाऊस','बारिश','वर्षा','മഴ','വെള്ളപ്പൊക്കം','வெள்ளம்','மழை','వరద','వర్ష','ప్రవాహ','ಪ್ರವಾಹ','ಮಳೆ'],
+ di:['disease','pest','fung','insect','रोग','कीट','कीड','बुरशी','രോഗ','കീട','நோய்','பூச்சி','తెగులు','పురుగు','ರೋಗ','ಕೀಟ'],
+ he:['heat','hot','temperature','गर्मी','उष्ण','उन्हाळ','ചൂട','താപ','வெப்ப','வெயில்','వేడి','ఉష్ణ','ಬಿಸಿ','ಶಾಖ','ತಾಪ'],
+ so:['sow','plant','onset','monsoon','seed','बुवाई','बुआई','पेरणी','मानसून','മൺസൂൺ','വിത','விதை','பருவமழை','విత్తన','రుతుపవన','ಬಿತ್ತನೆ','ಮುಂಗಾರು'],
+ risk:['risk','status','summary','forecast','जोखिम','धोका','അപകട','ஆபத்து','ప్రమాదం','ಅಪಾಯ','हाल','സ്ഥിതി']
+};
+const YLD={rice:4.2,cotton:2.0,coffee:1.0,wheat:4.6,soy:1.2};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const RL={en:'en-IN',hi:'hi-IN',ml:'ml-IN',ta:'ta-IN',te:'te-IN',mr:'mr-IN',kn:'kn-IN'};
+TTS.kn='kn-IN';
+let L=(AI[lang]?lang:'en'),opened=false,rec=null;
+const num=x=>(L==='mr'&&typeof dg==='function')?dg(x):String(x);
+const lev=v=>v>=65?2:v>=35?1:0;
+function ctx(){
+ const s=read(),c=$('crop').value,A=AI[L];
+ const dry=cl((30-s.soil)/30),def=cl(-s.rain/60),dly=cl(s.onset/21),heat=cl(s.temp/3),nd=cl(-s.ndvi/.1);
+ const d=Math.round(cl(100*(.3*dry+.3*def+.15*dly+.1*heat+.15*nd)*s.crop.d,0,100));
+ const f=Math.round(cl(100*(.6*cl(s.rain/80)+.4*cl((s.soil-35)/20))*s.crop.f,0,100));
+ const u=Math.round(cl(100*(.5*cl((s.soil-28)/25)+.3*cl(s.rain/70)+.2*(1-cl(Math.abs(s.temp-1)/3)))*s.crop.u,0,100));
+ const Lo=Math.round(cl(.35*d+.3*f+.15*u,0,60)),y=YLD[c];
+ const sg=v=>(v>0?'+':'')+v;
+ return {r:$('region').selectedOptions[0].textContent,cr:A.crop[c],s:num(s.soil),rn:num(sg(s.rain)),o:num(s.onset),t:num(sg(+s.temp.toFixed(1))),
+  d:num(d),f:num(f),u:num(u),L:num(Lo),y:num(y.toFixed(1)),ey:num((y*(1-Lo/100)).toFixed(1)),ld:A.lvl[lev(d)],lf:A.lvl[lev(f)],lu:A.lvl[lev(u)],
+  raw:{d,f,u,Lo,onset:s.onset,temp:s.temp}};
+}
+const fill=(t,c)=>t.replace(/\{(\w+)\}/g,(m,k)=>c[k]!==undefined?c[k]:m);
+function intent(q){
+ q=q.toLowerCase();let best=null,bs=0;
+ for(const k in KW){let n=0;KW[k].forEach(w=>{if(q.includes(w.toLowerCase()))n++});if(n>bs){bs=n;best=k}}
+ return best;
+}
+function answer(it){
+ const A=AI[L],c=ctx(),R=c.raw;
+ if(!it)return A.fb;
+ if(it==='risk')return fill(A.risk,c);
+ if(it==='yld')return fill(A.yld,c);
+ if(it==='ins')return fill(A.ins,c);
+ const on={dry:R.d>=35,fl:R.f>=35,di:R.u>=35,he:R.temp>=2,so:R.onset>=10}[it];
+ const T=A[it];return fill(T[0],c)+' '+fill(on?T[1]:T[2],c);
+}
+function add(text,who){
+ const m=document.createElement('div');m.className='vaM '+who;m.textContent=text;
+ if(who==='b'){const b=document.createElement('button');b.type='button';b.className='vaS';b.textContent=AI[L].ls;
+  b.addEventListener('click',()=>{ttsPlay([text],null,()=>toast(LS[L]?LS[L][2]:'Voice unavailable'),L)});m.appendChild(b)}
+ $('vaMsgs').appendChild(m);$('vaMsgs').scrollTop=$('vaMsgs').scrollHeight;
+}
+function toast(t){const e=$('vaToast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',5000)}
+async function ask(q,it){
+ q=(q||'').trim();if(!q)return;
+ add(q,'u');it=it||intent(q);
+ let a=null;
+ if(window.VARSHA_AI_ENDPOINT){try{const r=await fetch(window.VARSHA_AI_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,lang:L,context:ctx().raw})});const j=await r.json();a=j.answer}catch(e){a=null}}
+ add(a||answer(it),'b');
+}
+function chips(){const A=AI[L];$('vaChips').innerHTML='';A.chips.forEach(([l,k])=>{const b=document.createElement('button');b.type='button';b.textContent=l;b.addEventListener('click',()=>ask(l,k));$('vaChips').appendChild(b)})}
+function ui(){const A=AI[L];$('vaTtl').textContent=A.ttl;$('vaIn').placeholder=A.ph;$('vaSend').textContent=A.send;$('vaLang').value=L;chips();$('vaBtn').setAttribute('aria-label',A.ttl)}
+function listen(){
+ if(!SR){toast('Voice input is not supported in this browser. Please type your question.');return}
+ if(rec){rec.stop();return}
+ rec=new SR();rec.lang=RL[L];rec.interimResults=false;rec.maxAlternatives=1;
+ rec.onstart=()=>$('vaMic').classList.add('on');
+ rec.onresult=e=>{const t=e.results[0][0].transcript;$('vaIn').value='';ask(t)};
+ rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed')toast('Please allow microphone access.')};
+ rec.onend=()=>{$('vaMic').classList.remove('on');rec=null};
+ try{rec.start()}catch(e){rec=null}
+}
+function open(v){opened=v;$('vaPanel').classList.toggle('open',v);$('vaBtn').setAttribute('aria-expanded',v);
+ if(v&&!$('vaMsgs').children.length)add(AI[L].wel,'b');if(v)setTimeout(()=>$('vaIn').focus(),50)}
+$('vaBtn').addEventListener('click',()=>open(!opened));
+$('vaX').addEventListener('click',()=>open(false));
+$('vaSend').addEventListener('click',()=>{const v=$('vaIn').value;$('vaIn').value='';ask(v)});
+$('vaIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('vaSend').click()}});
+$('vaMic').addEventListener('click',listen);
+$('vaLang').addEventListener('change',e=>{L=e.target.value;ttsStop();ui();$('vaMsgs').innerHTML='';add(AI[L].wel,'b')});
+$('lang').addEventListener('change',()=>{if(AI[lang]&&AI[lang]!==AI[L]){L=lang;ttsStop();ui();$('vaMsgs').innerHTML='';if(opened)add(AI[L].wel,'b')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&opened)open(false)});
+ui();
+})();
+</script>
+
+</body>
+</html>
